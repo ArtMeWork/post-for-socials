@@ -1,0 +1,10 @@
+<div class="panel panel-primary">
+	<div class="panel-heading">Войти на сайт</div>
+	<div class="panel-body">
+		<form class="form-signin" name="loginForm" ng-submit="login.send()">
+			<input type="text" class="form-control" ng-model="login.login" placeholder="Логин или email адрес" required autofocus>
+			<input type="password" class="form-control" ng-model="login.password" placeholder="Пароль" required>
+			<button class="btn btn-lg btn-primary btn-block" type="submit">Войти</button>
+		</form>
+	</div>
+</div>

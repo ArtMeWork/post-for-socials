@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>Post for all social networks.</title>
+	<link rel="stylesheet" href="libs/bootstrap/dist/css/bootstrap.min.css">
+	<link rel="stylesheet" href="styles/main.css">
+</head>
+<body ng-app="postApp">
+	<nav class="navbar navbar-inverse navbar-fixed-top visible-xs">
+		<div class="container">
+			<div class="navbar-header">
+				<button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
+					<span class="sr-only">Toggle navigation</span>
+					<span class="icon-bar"></span>
+					<span class="icon-bar"></span>
+					<span class="icon-bar"></span>
+				</button>
+				<a class="navbar-brand" ui-sref="home">Пост для всех</a>
+			</div>
+			<div id="navbar" class="navbar-collapse collapse">
+				<ul class="nav navbar-nav">
+					<li ui-sref-active="active"><a ui-sref="hello">Hello</a></li>
+				</ul>
+				<ul class="nav navbar-nav navbar-right ng-hide" ng-hide="currentUser">
+					<li ui-sref-active="active"><a ui-sref="signup">Зарегистрироваться</a></li>
+					<li ui-sref-active="active"><a ui-sref="login">Войти</a></li>
+				</ul>
+				<div class="ng-hide" ng-show="currentUser"><b><p class="navbar-text" ng-bind="currentUser.showName"></p></b></div>
+				<ul class="nav navbar-nav navbar-right ng-hide" ng-show="currentUser">
+					<li ui-sref-active="active"><a ui-sref="profile">Настройки</a></li>
+					<li ui-sref-active="active"><a ui-sref="logout">Выйти</a></li>
+				</ul>
+			</div><!--/.navbar-collapse -->
+		</div>
+	</nav>
+
+	<!-- Main jumbotron for a primary marketing message or call to action -->
+	<div class="container" id="main">
+		<div class="row">
+			<div class="col-sm-3 hidden-xs">
+				<h3 ui-sref="home" class="site-name">Пост для всех</h3>
+				<div class="list-group">
+					<a ui-sref-active="active" ui-sref="hello" class="list-group-item">Hello</a>
+					<a ui-sref-active="active" ng-hide="currentUser" ui-sref="signup" class="list-group-item ng-hide">Зарегистрироваться</a>
+					<a ui-sref-active="active" ng-hide="currentUser" ui-sref="login" class="list-group-item ng-hide">Войти</a>
+				</div>
+				<h4 ng-bind="currentUser.showName" align="center"></h4>
+				<div class="list-group ng-hide" ng-show="currentUser">
+					<a ui-sref-active="active" ui-sref="profile" class="list-group-item">Настройки</a>
+					<a ui-sref-active="active" ui-sref="logout" class="list-group-item">Выйти</a>
+				</div>
+			</div>
+			<div class="col-sm-9" ui-view></div>
+		</div>
+
+	</div> <!-- /container -->
+
+	<!-- libs -->
+	<script src="libs/jquery/dist/jquery.min.js"></script>
+	<script src="libs/angular/angular.min.js"></script>
+	<script src="libs/bootstrap/dist/js/bootstrap.min.js"></script>
+	<script src="libs/angular-ui-router/release/angular-ui-router.min.js"></script>
+	<script src="libs/angular-resource/angular-resource.min.js"></script>
+	<!-- end libs -->
+
+	<!-- angular controllers, services -->
+	<script src="scripts/app.js"></script>
+	<script src="scripts/controllers/post.js"></script>
+	<script src="scripts/controllers/auth.js"></script>
+	<script src="scripts/services/lb-services.js"></script>
+	<!-- end angular controllers, services -->
+</body>
+</html>
