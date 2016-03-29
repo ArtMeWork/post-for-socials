@@ -4,12 +4,17 @@
     "connector": "memory"
   },
   "mysqlDs": {
-    "host": "ec2-54-235-246-67.compute-1.amazonaws.com",
-    "port": 5432,
-    "database": "df5j1ohqh77724",
-    "username": "jkghyirjzlmmre",
-    "password": "DaN5sUx3tKpAbgsbUP5pdHqxvM",
+    "host": "localhost",
+    "port": 3306,
+    "database": "post_for_all",
+    "username": "root",
+    "password": "",
     "name": "mysqlDs",
     "connector": "mysql"
+  },
+  "psql": {
+    "name": "psql",
+    "connector": "postgresql",
+    "url": "postgres://nqljdzntycvdvs:DNGvMyubXJ91WqUTPLaQj0AiQb@ec2-54-235-199-36.compute-1.amazonaws.com:5432/dacjhmqrpjqnbt?ssl=true"
   }
 }

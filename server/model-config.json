@@ -33,11 +33,11 @@
     "public": false
   },
   "post": {
-    "dataSource": "mysqlDs",
+    "dataSource": "psql",
     "public": true
   },
   "author": {
-    "dataSource": "mysqlDs",
+    "dataSource": "psql",
     "public": true
   }
 }

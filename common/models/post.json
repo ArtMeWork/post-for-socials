@@ -7,7 +7,7 @@
   },
   "properties": {
     "text": {
-      "type": "text",
+      "type": "string",
       "required": true
     },
     "date": {
