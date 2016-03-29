@@ -1,4 +1,4 @@
-/*module.exports = function(app) {
+module.exports = function(app) {
 	app.dataSources.mysqlDs.automigrate(['author', 'post'], function (err) {
 		if (err) throw err;
 		app.models.author.create([], function (err, model) {
@@ -11,4 +11,3 @@
 		});
 	});
 };
-*/

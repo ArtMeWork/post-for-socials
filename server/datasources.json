@@ -6,9 +6,9 @@
   "mysqlDs": {
     "host": "ec2-54-235-246-67.compute-1.amazonaws.com",
     "port": 5432,
-    "database": "d9ujo9lfema93t",
-    "username": "imzehleumudqss",
-    "password": "NXOnYeck9z4aBg0GA341kf58CT",
+    "database": "df5j1ohqh77724",
+    "username": "jkghyirjzlmmre",
+    "password": "DaN5sUx3tKpAbgsbUP5pdHqxvM",
     "name": "mysqlDs",
     "connector": "mysql"
   }
