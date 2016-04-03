@@ -1,11 +1,10 @@
 app
 .controller('SettingsUserCtrl', ['$scope', 'Author', '$rootScope', function($scope, User, $rootScope) {
-	$scope.connect = function() {
-  	OAuth.initialize('2lk1fU3TyTZpMbsBRjBUeuEHN', {cache:true});
-    var authorizationResult = OAuth.create('twitter');
+	$scope.connect = function() {	 
+  	OAuth.initialize('Gu74r20E9GstEHuQU_qneaw7OVI');
     OAuth.popup('twitter', {cache:true}, function(error, result) { //cache means to execute the callback if the tokens are already present
         if (!error) {
-          authorizationResult = result;
+          console.log("LOGIN!",result);
         } else {
           console.log(error);
         }
