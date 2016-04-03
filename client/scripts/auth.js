@@ -21,7 +21,7 @@ app
 }])
 .controller('LoginAuthCtrl', ['$rootScope', '$scope', 'Author', '$state', function($rootScope, $scope, User, $state) {
 	$scope.login = {
-		login: "meridos",
+		login: "meridos@mail.ru",
 		password: "admintema",
 		send: function () {
 			var _name=_email=null;
@@ -52,4 +52,44 @@ app
 		$rootScope.currentUser = null;
 		$state.go('hello');
 	});
-}]);
+}])
+
+
+.directive('username', ['Author', function(User) {
+	return {
+		require: 'ngModel',
+		restrict: 'A',
+		link: function(scope, element, attrs, ngModel) {
+			ngModel.$validators.username = function(val) {
+				if(val)
+					User.usernameExist({username: val}).$promise.then(function(res) {
+						if(res.usernameExist) {
+							ngModel.$setValidity('username', false);
+						} else {
+							ngModel.$setValidity('username', true);
+						}
+					}, function() {
+						ngModel.$setValidity('username', true);
+					});
+				return true;
+			};
+		}
+	}
+}])
+.directive('confirmPass', function() {
+	return {
+		require: 'ngModel',
+		restrict: 'A',
+		scope: {
+			password: '=confirmPass'
+		},
+		link: function(scope, element, attrs, ngModel) {
+				ngModel.$validators.confirmPassword = function(val) {
+					return val === scope.password;
+				};
+				scope.$watch("password", function(a) {
+					ngModel.$validate();
+				});
+		}
+	}
+});

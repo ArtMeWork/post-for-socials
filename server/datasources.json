@@ -13,8 +13,8 @@
     "connector": "mysql"
   },
   "psql": {
+    "url": "postgres://nqljdzntycvdvs:DNGvMyubXJ91WqUTPLaQj0AiQb@ec2-54-235-199-36.compute-1.amazonaws.com:5432/dacjhmqrpjqnbt?ssl=true",
     "name": "psql",
-    "connector": "postgresql",
-    "url": "postgres://nqljdzntycvdvs:DNGvMyubXJ91WqUTPLaQj0AiQb@ec2-54-235-199-36.compute-1.amazonaws.com:5432/dacjhmqrpjqnbt?ssl=true"
+    "connector": "postgresql"
   }
 }

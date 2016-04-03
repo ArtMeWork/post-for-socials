@@ -32,12 +32,13 @@ app
 			auth: true
 		})
 		.state('forbidden', {
-			url: '/forbidden',
+			url: "/forbidden",
 			template: "<div class='text-center'><h2>403 Access Forbidden</h2><br><p><a ui-sref='login'>Please login</a></p></div>"
 		})
-		.state('profile', {
-			url: '/profile',
-			template: '<h2>Hello user</h2>'
+		.state('settings', {
+			url: "/settings",
+			templateUrl: "views/settings.user.html",
+			controller: "SettingsUserCtrl"
 		});
 }])
 .run(['$rootScope', '$state', 'Author', function($rootScope, $state, User) {

@@ -14,7 +14,6 @@ input, button, a, textarea, select {
 
 .site-name {
   margin: 0 0 20px 0;
-  cursor: pointer;
 }
 
 .label-required:after {
@@ -45,13 +44,6 @@ form .ng-dirty.ng-invalid:focus {
   margin-bottom: 10px;
   border-top-left-radius: 0;
   border-top-right-radius: 0;
-}
-
-.form-signup .form-control {
-  position: relative;
-  height: auto;
-  padding: 10px;
-  font-size: 16px;
 }
 
 .panel-body form .form-group:last-child {
