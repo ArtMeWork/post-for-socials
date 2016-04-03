@@ -4,6 +4,7 @@
   "main": "server/server.js",
   "scripts": {
     "start": "node .",
+    "postinstall": "bower install",
     "pretest": "jshint .",
     "posttest": "nsp check"
   },
@@ -20,6 +21,7 @@
     "serve-favicon": "^2.0.1"
   },
   "devDependencies": {
+    "bower": "^1.7.7",
     "grunt": "^0.4.5",
     "grunt-contrib-connect": "^1.0.0",
     "grunt-contrib-watch": "^1.0.0",
