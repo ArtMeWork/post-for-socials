@@ -1,6 +1,9 @@
 module.exports = function(Author) {
   var twitter = require('twitter'),
-  twitterClient;
+  twitterClient,
+  socialClients = {
+    twitter: undefined
+  };
 	Author.usernameExist = function(username, cb) {
     var response;
     Author.find({
@@ -30,11 +33,11 @@ module.exports = function(Author) {
       access_token_key: key,
       access_token_secret: secret_key
     });
-    twitterClient.get('account/verify_credentials', function(error, twit_data) {
-      var _res = false;
-      error ? twitterClient = undefined : twitterClient.user = _res = twit_data;
-      cb(_res);
-    });
+    // twitterClient.get('account/verify_credentials', function(error, twit_data) {
+    //   var _res = false;
+    //   error ? twitterClient = undefined : twitterClient.user = _res = twit_data;
+    //   cb(_res);
+    // });
   };
 
   Author.connect = function(id, provider, key, secret_key, cb) {
@@ -79,7 +82,6 @@ module.exports = function(Author) {
         cb(err);
       } else {
         var socials = {};
-        console.log(twitterClient);
         if(twitterClient) socials.twitter=twitterClient.user.screen_name;
         cb(null, socials);
       }
@@ -103,7 +105,7 @@ module.exports = function(Author) {
             twitterConnect(data.twitter_key,data.twitter_secret_key, function(_res) {
               if(_res) {
                 console.log("Twitter connected: "+twitterClient.user.screen_name);
-                context.result.user.twitter = twitterClient.user.screen_name;
+                res.twitter = twitterClient.user.screen_name;
                 next();
               } else {
                 console.log("Twitter not connect.");
@@ -127,4 +129,5 @@ module.exports = function(Author) {
 
     next();
   });
+
 };
