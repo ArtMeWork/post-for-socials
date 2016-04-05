@@ -21,7 +21,7 @@ app
 			$scope.newPost.socials.splice($scope.newPost.socials.indexOf(item), 1);
 		},
 		send: function() {
-			Post.create({
+			User.posts.create({id:$rootScope.currentUser.id},{
 				text: $scope.newPost.text,
 				socials: $scope.newPost.socials
 			}, function() {

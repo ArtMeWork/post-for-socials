@@ -1678,6 +1678,78 @@ module.factory(
           method: "GET"
         },
 
+        /**
+         * @ngdoc method
+         * @name lbServices.Author#connect
+         * @methodOf lbServices.Author
+         *
+         * @description
+         *
+         * Connect your social network. With OAuth.io.
+         *
+         * @param {Object=} parameters Request parameters.
+         *
+         *  - `id` – `{number}` - 
+         *
+         * @param {Object} postData Request data.
+         *
+         *  - `provider` – `{string}` - 
+         *
+         *  - `key` – `{string}` - 
+         *
+         *  - `secret_key` – `{string}` - 
+         *
+         * @param {function(Object,Object)=} successCb
+         *   Success callback with two arguments: `value`, `responseHeaders`.
+         *
+         * @param {function(Object)=} errorCb Error callback with one argument:
+         *   `httpResponse`.
+         *
+         * @returns {Object} An empty reference that will be
+         *   populated with the actual data once the response is returned
+         *   from the server.
+         *
+         * Data properties:
+         *
+         *  - `connected` – `{object=}` - 
+         */
+        "connect": {
+          url: urlBase + "/authors/:id/connect",
+          method: "POST"
+        },
+
+        /**
+         * @ngdoc method
+         * @name lbServices.Author#isConnected
+         * @methodOf lbServices.Author
+         *
+         * @description
+         *
+         * Get connected socials list.
+         *
+         * @param {Object=} parameters Request parameters.
+         *
+         *  - `id` – `{number}` - 
+         *
+         * @param {function(Object,Object)=} successCb
+         *   Success callback with two arguments: `value`, `responseHeaders`.
+         *
+         * @param {function(Object)=} errorCb Error callback with one argument:
+         *   `httpResponse`.
+         *
+         * @returns {Object} An empty reference that will be
+         *   populated with the actual data once the response is returned
+         *   from the server.
+         *
+         * Data properties:
+         *
+         *  - `connected` – `{*=}` - 
+         */
+        "isConnected": {
+          url: urlBase + "/authors/:id/isConnected",
+          method: "GET"
+        },
+
         // INTERNAL. Use Post.author() instead.
         "::get::post::author": {
           url: urlBase + "/posts/:id/author",

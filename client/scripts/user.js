@@ -1,15 +1,9 @@
 app
-.controller('SettingsUserCtrl', ['$scope', 'Author', '$rootScope', function($scope, User, $rootScope) {
-	$scope.connect = function() {	 
-  	OAuth.initialize('Gu74r20E9GstEHuQU_qneaw7OVI');
-    OAuth.popup('twitter', {cache:true}, function(error, result) { //cache means to execute the callback if the tokens are already present
-        if (!error) {
-          console.log("LOGIN!",result);
-        } else {
-          console.log(error);
-        }
-    });
-	};
+.controller('SettingsUserCtrl', ['$scope', 'Author', '$rootScope', 'socialsService', function($scope, User, $rootScope, socialsService) {
+  $scope.remove = function(){console.log('Twitter removed.')};
+  $scope.connect = function(){
+  	socialsService.connect("twitter");
+  };
 	var defaultSettings = angular.copy($scope.settings);
 	$scope.settings = {
 		username: "",

@@ -1,7 +1,23 @@
 <div class="panel panel-primary">
 	<div class="panel-heading">Настройки профиля</div>
 	<div class="panel-body">
-		<input type="button" class="btn btn-success" ng-click="connect()" value="Connect Twitter">
+		<div class="form-group">
+			<div>
+				<label>Добавить социальную сеть:</label>
+			</div>
+			<input type="button" class="btn btn-success ng-hide" ng-hide="currentUser.twitter" ng-click="connect()" value="Connect Twitter">
+		</div>
+		<div class="form-group">
+			<div>
+				<label>Подключенные социальные сети:</label>
+			</div>
+			<blockquote class="ng-hide" ng-show="!currentUser.twitter&&!currentUser.vkontakte&&!currentUser.facebook">
+				<p>Вы не добавили ни одну социальную сеть.</p>
+			</blockquote>
+			<blockquote class="ng-hide" ng-show="currentUser.twitter">
+				<p><b>Twitter:</b> <span ng-bind="currentUser.twitter"></span>  <a href="" class="pull-right" ng-click="remove()"><span class="glyphicon glyphicon-remove" aria-hidden="true"></span></a></p>				
+			</blockquote>
+		</div>
 		<br>
 		<br>
 		<form name="settingsForm" ng-submit="settingsForm.$valid && send()">

@@ -19,7 +19,7 @@ app
 		}
 	};
 }])
-.controller('LoginAuthCtrl', ['$rootScope', '$scope', 'Author', '$state', function($rootScope, $scope, User, $state) {
+.controller('LoginAuthCtrl', ['$rootScope', '$scope', 'Author', '$state', 'socialsService', function($rootScope, $scope, User, $state, socialsService) {
 	$scope.login = {
 		login: "meridos@mail.ru",
 		password: "admintema",
@@ -38,6 +38,7 @@ app
 					userName: data.user.username,
 					showName: data.user.username || data.user.email
 				};
+				// socialsService.isConnected();
 				$state.go('home');
 			}, function(err) {
 				alert('Login is failed');
