@@ -38,7 +38,6 @@ app
 					userName: data.user.username,
 					showName: data.user.username || data.user.email
 				};
-				// socialsService.isConnected();
 				$state.go('home');
 			}, function(err) {
 				alert('Login is failed');
