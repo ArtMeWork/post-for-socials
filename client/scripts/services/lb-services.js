@@ -895,6 +895,121 @@ module.factory(
 
         /**
          * @ngdoc method
+         * @name lbServices.Author#prototype$__findById__AccessTokens
+         * @methodOf lbServices.Author
+         *
+         * @description
+         *
+         * Find a related item by id for AccessTokens.
+         *
+         * @param {Object=} parameters Request parameters.
+         *
+         *  - `id` – `{*}` - User id
+         *
+         *  - `fk` – `{*}` - Foreign key for AccessTokens
+         *
+         * @param {function(Object,Object)=} successCb
+         *   Success callback with two arguments: `value`, `responseHeaders`.
+         *
+         * @param {function(Object)=} errorCb Error callback with one argument:
+         *   `httpResponse`.
+         *
+         * @returns {Object} An empty reference that will be
+         *   populated with the actual data once the response is returned
+         *   from the server.
+         *
+         * <em>
+         * (The remote method definition does not provide any description.
+         * This usually means the response is a `Author` object.)
+         * </em>
+         */
+        "prototype$__findById__AccessTokens": {
+          params: {
+          'fk': '@fk'
+          },
+          url: urlBase + "/authors/:id/AccessTokens/:fk",
+          method: "GET"
+        },
+
+        /**
+         * @ngdoc method
+         * @name lbServices.Author#prototype$__destroyById__AccessTokens
+         * @methodOf lbServices.Author
+         *
+         * @description
+         *
+         * Delete a related item by id for AccessTokens.
+         *
+         * @param {Object=} parameters Request parameters.
+         *
+         *  - `id` – `{*}` - User id
+         *
+         *  - `fk` – `{*}` - Foreign key for AccessTokens
+         *
+         * @param {function(Object,Object)=} successCb
+         *   Success callback with two arguments: `value`, `responseHeaders`.
+         *
+         * @param {function(Object)=} errorCb Error callback with one argument:
+         *   `httpResponse`.
+         *
+         * @returns {Object} An empty reference that will be
+         *   populated with the actual data once the response is returned
+         *   from the server.
+         *
+         * This method returns no data.
+         */
+        "prototype$__destroyById__AccessTokens": {
+          params: {
+          'fk': '@fk'
+          },
+          url: urlBase + "/authors/:id/AccessTokens/:fk",
+          method: "DELETE"
+        },
+
+        /**
+         * @ngdoc method
+         * @name lbServices.Author#prototype$__updateById__AccessTokens
+         * @methodOf lbServices.Author
+         *
+         * @description
+         *
+         * Update a related item by id for AccessTokens.
+         *
+         * @param {Object=} parameters Request parameters.
+         *
+         *  - `id` – `{*}` - User id
+         *
+         *  - `fk` – `{*}` - Foreign key for AccessTokens
+         *
+         * @param {Object} postData Request data.
+         *
+         * This method expects a subset of model properties as request parameters.
+         *
+         * @param {function(Object,Object)=} successCb
+         *   Success callback with two arguments: `value`, `responseHeaders`.
+         *
+         * @param {function(Object)=} errorCb Error callback with one argument:
+         *   `httpResponse`.
+         *
+         * @returns {Object} An empty reference that will be
+         *   populated with the actual data once the response is returned
+         *   from the server.
+         *
+         * <em>
+         * (The remote method definition does not provide any description.
+         * This usually means the response is a `Author` object.)
+         * </em>
+         */
+        "prototype$__updateById__AccessTokens": {
+          params: {
+          'fk': '@fk'
+          },
+          url: urlBase + "/authors/:id/AccessTokens/:fk",
+          method: "PUT"
+        },
+
+        /**
+         * @ngdoc method
          * @name lbServices.Author#prototype$__get__accessTokens
          * @methodOf lbServices.Author
          *
@@ -1052,6 +1167,143 @@ module.factory(
         // INTERNAL. Use Author.posts.count() instead.
         "prototype$__count__posts": {
           url: urlBase + "/authors/:id/posts/count",
+          method: "GET"
+        },
+
+        /**
+         * @ngdoc method
+         * @name lbServices.Author#prototype$__get__AccessTokens
+         * @methodOf lbServices.Author
+         *
+         * @description
+         *
+         * Queries AccessTokens of author.
+         *
+         * @param {Object=} parameters Request parameters.
+         *
+         *  - `id` – `{*}` - User id
+         *
+         *  - `filter` – `{object=}` - 
+         *
+         * @param {function(Array.<Object>,Object)=} successCb
+         *   Success callback with two arguments: `value`, `responseHeaders`.
+         *
+         * @param {function(Object)=} errorCb Error callback with one argument:
+         *   `httpResponse`.
+         *
+         * @returns {Array.<Object>} An empty reference that will be
+         *   populated with the actual data once the response is returned
+         *   from the server.
+         *
+         * <em>
+         * (The remote method definition does not provide any description.
+         * This usually means the response is a `Author` object.)
+         * </em>
+         */
+        "prototype$__get__AccessTokens": {
+          isArray: true,
+          url: urlBase + "/authors/:id/AccessTokens",
+          method: "GET"
+        },
+
+        /**
+         * @ngdoc method
+         * @name lbServices.Author#prototype$__create__AccessTokens
+         * @methodOf lbServices.Author
+         *
+         * @description
+         *
+         * Creates a new instance in AccessTokens of this model.
+         *
+         * @param {Object=} parameters Request parameters.
+         *
+         *  - `id` – `{*}` - User id
+         *
+         * @param {Object} postData Request data.
+         *
+         * This method expects a subset of model properties as request parameters.
+         *
+         * @param {function(Object,Object)=} successCb
+         *   Success callback with two arguments: `value`, `responseHeaders`.
+         *
+         * @param {function(Object)=} errorCb Error callback with one argument:
+         *   `httpResponse`.
+         *
+         * @returns {Object} An empty reference that will be
+         *   populated with the actual data once the response is returned
+         *   from the server.
+         *
+         * <em>
+         * (The remote method definition does not provide any description.
+         * This usually means the response is a `Author` object.)
+         * </em>
+         */
+        "prototype$__create__AccessTokens": {
+          url: urlBase + "/authors/:id/AccessTokens",
+          method: "POST"
+        },
+
+        /**
+         * @ngdoc method
+         * @name lbServices.Author#prototype$__delete__AccessTokens
+         * @methodOf lbServices.Author
+         *
+         * @description
+         *
+         * Deletes all AccessTokens of this model.
+         *
+         * @param {Object=} parameters Request parameters.
+         *
+         *  - `id` – `{*}` - User id
+         *
+         * @param {function(Object,Object)=} successCb
+         *   Success callback with two arguments: `value`, `responseHeaders`.
+         *
+         * @param {function(Object)=} errorCb Error callback with one argument:
+         *   `httpResponse`.
+         *
+         * @returns {Object} An empty reference that will be
+         *   populated with the actual data once the response is returned
+         *   from the server.
+         *
+         * This method returns no data.
+         */
+        "prototype$__delete__AccessTokens": {
+          url: urlBase + "/authors/:id/AccessTokens",
+          method: "DELETE"
+        },
+
+        /**
+         * @ngdoc method
+         * @name lbServices.Author#prototype$__count__AccessTokens
+         * @methodOf lbServices.Author
+         *
+         * @description
+         *
+         * Counts AccessTokens of author.
+         *
+         * @param {Object=} parameters Request parameters.
+         *
+         *  - `id` – `{*}` - User id
+         *
+         *  - `where` – `{object=}` - Criteria to match model instances
+         *
+         * @param {function(Object,Object)=} successCb
+         *   Success callback with two arguments: `value`, `responseHeaders`.
+         *
+         * @param {function(Object)=} errorCb Error callback with one argument:
+         *   `httpResponse`.
+         *
+         * @returns {Object} An empty reference that will be
+         *   populated with the actual data once the response is returned
+         *   from the server.
+         *
+         * Data properties:
+         *
+         *  - `count` – `{number=}` - 
+         */
+        "prototype$__count__AccessTokens": {
+          url: urlBase + "/authors/:id/AccessTokens/count",
           method: "GET"
         },
 

@@ -2,10 +2,11 @@ var async = require('async');
 
 module.exports = function(Author) {
   var twitter = require('twitter'),
-  twitterClient,
+  twitterClient = {},
   socialClients = {
     twitter: undefined
   };
+
 	Author.usernameExist = function(username, cb) {
     var response;
     Author.find({
@@ -29,16 +30,17 @@ module.exports = function(Author) {
   );
 
   var twitterConnect = function(id, key, secret_key, cb) {
-    twitterClient = new twitter({
+    twitterClient[id] = new twitter({
       consumer_key: "ywPwAvJmU3by3asRWQGu0WJOh",
       consumer_secret: "Gr3cI0n66C1CWpBG732ATHpsb0AebDAZZ2xGOKpkFevnY2RJlS",
       access_token_key: key,
       access_token_secret: secret_key
     });
-    twitterClient.get('account/verify_credentials', function(error, twit_data) {
+    twitterClient[id].get('account/verify_credentials', function(error, twit_data) {
       var _res = false;
       if(error) {
-        socialClients.twitter = twitterClient = undefined;
+        socialClients.twitter = undefined;
+        delete twitterClient[id];
         Author.upsert({
           id: id,
           twitter_key: null,
@@ -99,7 +101,8 @@ module.exports = function(Author) {
               cb(null, _res);
             });
           } else {
-            twitterClient = socialClients.twitter = undefined;
+            socialClients.twitter = undefined;
+            delete twitterClient[id];
             cb(null, false);
           }
         }
@@ -128,7 +131,8 @@ module.exports = function(Author) {
           switch(provider) {
             case "twitter":
               name = socialClients.twitter;
-              twitterClient = socialClients.twitter = undefined;
+              socialClients.twitter = undefined;
+              delete twitterClient[id];
             break;
           }
           cb(null, name);
@@ -173,8 +177,8 @@ module.exports = function(Author) {
 
       function _twitter(cb) {
         for(var key in res.socials)
-          if(res.socials[key]==="twitter" && twitterClient) {
-            twitterClient.post('statuses/update', {status: res.text}, function(err, tweet, _res) {
+          if(res.socials[key]==="twitter" && twitterClient[res.authorId]) {
+            twitterClient[res.authorId].post('statuses/update', {status: res.text}, function(err, tweet, _res) {
               var send = false;
               if(!err) send = true;
               cb(null, send);

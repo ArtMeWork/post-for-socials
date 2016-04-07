@@ -38,7 +38,12 @@
     "posts": {
       "type": "hasMany",
       "model": "post",
-      "foreignKey": ""
+      "foreignKey": "authorId"
+    },
+    "AccessTokens": {
+      "model": "AccessToken",
+      "type": "hasMany",
+      "foreignKey": "authorId"
     }
   },
   "acls": [
