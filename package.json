@@ -15,6 +15,7 @@
   "dependencies": {
     "compression": "^1.0.3",
     "cors": "^2.5.2",
+    "fb": "^1.0.2",
     "helmet": "^0.14.0",
     "loopback": "^2.22.0",
     "loopback-boot": "^2.6.5",

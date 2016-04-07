@@ -43,6 +43,20 @@ app
 		});
 }])
 .run(['$rootScope', '$state', 'Author', 'socialsService', function($rootScope, $state, User, socialsService) {
+	socialsService.setCredentials({
+		app_id: "Gu74r20E9GstEHuQU_qneaw7OVI",
+		twitter: function(result) {
+			return {
+				twitter_key: result.oauth_token,
+				twitter_secret_key: result.oauth_token_secret
+			}
+		},
+		facebook: function(result) {
+			return {
+				facebook_token: result.access_token
+			}
+		}
+	});
 	if (localStorage.getItem('$LoopBack$accessTokenId')) {
 		var _token = localStorage.getItem('$LoopBack$accessTokenId'),
 				_userId = localStorage.getItem('$LoopBack$currentUserId');
@@ -52,9 +66,6 @@ app
 			id: _userId
 		};
 
-		socialsService.setCredentials({
-			twitter: "Gu74r20E9GstEHuQU_qneaw7OVI"
-		});
 
 		User.findById({
 			id: _userId
@@ -88,7 +99,7 @@ app
 }])
 .factory('socialsService', ['$q', '$rootScope', 'Author', function($q, $rootScope, User) {
 	var priv = {
-		apps_id: {},
+		credentials: {},
 		remember: function(provider, name) {
 			if(!provider && typeof name === "object") {
 				$rootScope.currentUser.socials = name;
@@ -99,18 +110,18 @@ app
 	};
 	var pub = {
 		setCredentials: function(credentials) {
-			priv.apps_id = credentials;
+			priv.credentials = credentials;
 		},
 		connect: function(provider) {
 			var defer = $q.defer();
-			OAuth.initialize(priv.apps_id[provider]);
-			OAuth.popup(provider, {cache:false}, function(error, result) {
+			OAuth.initialize(priv.credentials.app_id);
+			OAuth.popup(provider, {cache: false}, function(error, result) {
 				if (!error) {
+					console.log(result);
 					User.connect({
 		  			id: $rootScope.currentUser.id,
 		  			provider: provider,
-		  			key: result.oauth_token,
-		  			secret_key: result.oauth_token_secret
+		  			params: priv.credentials[provider](result)
 		  		}).$promise.then(function(data) {
 		  			priv.remember(provider, data.connected);
 		  			defer.resolve(data);

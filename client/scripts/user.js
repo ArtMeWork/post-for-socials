@@ -1,7 +1,7 @@
 app
 .controller('SettingsUserCtrl', ['$scope', 'Author', '$rootScope', 'socialsService', function($scope, User, $rootScope, socialsService) {
-  $scope.connect = function() {
-  	socialsService.connect("twitter");
+  $scope.connect = function(provider) {
+  	socialsService.connect(provider);
   };
   $scope.disconnect = function(provider) {
   	socialsService.disconnect(provider).then(function(res) {

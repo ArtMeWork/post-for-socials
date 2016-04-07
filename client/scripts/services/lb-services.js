@@ -1947,9 +1947,7 @@ module.factory(
          *
          *  - `provider` – `{string}` - 
          *
-         *  - `key` – `{string}` - 
-         *
-         *  - `secret_key` – `{string}` - 
+         *  - `params` – `{object}` - 
          *
          * @param {function(Object,Object)=} successCb
          *   Success callback with two arguments: `value`, `responseHeaders`.
@@ -1963,7 +1961,7 @@ module.factory(
          *
          * Data properties:
          *
-         *  - `connected` – `{object=}` - 
+         *  - `connected` – `{string=}` - 
          */
         "connect": {
           url: urlBase + "/authors/:id/connect",

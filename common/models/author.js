@@ -1,11 +1,16 @@
-var async = require('async');
 
 module.exports = function(Author) {
-  var twitter = require('twitter'),
+  var async = require('async'),
+  twitter = require('twitter'),
+  facebook = require('fb'),
   twitterClient = {},
   socialClients = {
-    twitter: undefined
+    twitter: undefined,
+    facebook: undefined
   };
+
+
+  
 
 	Author.usernameExist = function(username, cb) {
     var response;
@@ -43,34 +48,36 @@ module.exports = function(Author) {
         delete twitterClient[id];
         Author.upsert({
           id: id,
-          twitter_key: null,
-          twitter_secret_key: null
+          twitter: null
         });
       } else socialClients.twitter = _res = twit_data.screen_name;
       cb(_res);
     });
   };
 
-  Author.connect = function(id, provider, key, secret_key, cb) {  
+  Author.connect = function(id, provider, params, cb) {  
     if(socialClients.hasOwnProperty(provider)) {
-      var params = {};
-      params["id"] = id;
-      params[provider+"_key"] = key;
-      params[provider+"_secret_key"] = secret_key;
-      Author.upsert(params, function(err, instance) {
+      var query = {
+        id: id
+      };
+      query[provider] = params
+      Author.upsert(query, function(err, instance) {
         if(!err) {
           switch(provider) {
             case "twitter":
-            twitterConnect(id, key, secret_key, function(_res) {
+            twitterConnect(id, params.twitter_key, params.twitter_secret_key, function(_res) {
               _res ? cb(null, _res) : cb("Twitter connect problem.");
             });
+            break;
+            default:
+              cb("Provider not found");
             break;
           }
         } else {
           cb("Insert tokens problem");
         }
       });
-    }
+    } else cb("Provider not found");
   };
   Author.remoteMethod(
     'connect',
@@ -80,9 +87,8 @@ module.exports = function(Author) {
       accepts: [
         {arg: 'id', type: 'number', required: true, http: {source: 'path'}},
         {arg: 'provider', type: 'string', required: true},
-        {arg: 'key', type: 'string', required: true},
-        {arg: 'secret_key', type: 'string', required: true}],
-      returns: {arg: 'connected', type: 'object'}
+        {arg: 'params', type: 'object', required: true}],
+      returns: {arg: 'connected', type: 'string'}
     }
   );
 
@@ -96,8 +102,8 @@ module.exports = function(Author) {
         });
 
         function _twitter(cb) {
-          if(data.twitter_key && data.twitter_secret_key) {
-            twitterConnect(id, data.twitter_key,data.twitter_secret_key, function(_res) {
+          if(data.twitter) {
+            twitterConnect(id, data.twitter.twitter_key,data.twitter.twitter_secret_key, function(_res) {
               cb(null, _res);
             });
           } else {
@@ -121,10 +127,8 @@ module.exports = function(Author) {
 
   Author.disconnect = function(id, provider, cb) {
     if(!socialClients[provider]) cb("NOT_CONNECTED"); else {
-      var params = {};
-      params["id"] = id;
-      params[provider + "_key"] = null;
-      params[provider + "_secret_key"] = null;
+      var params = {id: id};
+      params[provider] = null;
       Author.upsert(params, function(err, instance) {
         if(err) cb(err); else {
           var name = "";
