@@ -1743,11 +1743,47 @@ module.factory(
          *
          * Data properties:
          *
-         *  - `connected` – `{*=}` - 
+         *  - `connected` – `{object=}` - 
          */
         "isConnected": {
           url: urlBase + "/authors/:id/isConnected",
           method: "GET"
+        },
+
+        /**
+         * @ngdoc method
+         * @name lbServices.Author#disconnect
+         * @methodOf lbServices.Author
+         *
+         * @description
+         *
+         * Disconnect social network.
+         *
+         * @param {Object=} parameters Request parameters.
+         *
+         *  - `id` – `{number}` - 
+         *
+         * @param {Object} postData Request data.
+         *
+         *  - `provider` – `{string}` - 
+         *
+         * @param {function(Object,Object)=} successCb
+         *   Success callback with two arguments: `value`, `responseHeaders`.
+         *
+         * @param {function(Object)=} errorCb Error callback with one argument:
+         *   `httpResponse`.
+         *
+         * @returns {Object} An empty reference that will be
+         *   populated with the actual data once the response is returned
+         *   from the server.
+         *
+         * Data properties:
+         *
+         *  - `disconnected` – `{boolean=}` - 
+         */
+        "disconnect": {
+          url: urlBase + "/authors/:id/disconnect",
+          method: "POST"
         },
 
         // INTERNAL. Use Post.author() instead.

@@ -20,28 +20,36 @@ app
 	};
 }])
 .controller('LoginAuthCtrl', ['$rootScope', '$scope', 'Author', '$state', 'socialsService', function($rootScope, $scope, User, $state, socialsService) {
+	var enter = false;
 	$scope.login = {
 		login: "meridos@mail.ru",
 		password: "admintema",
 		send: function () {
 			var _name=_email=null;
 			this.login.indexOf("@")===-1 ? _name = this.login : _email = this.login;
-			User.login({ 
-				username: _name,
-				email: _email,
-				password: this.password
-			}, function(data) {
-				$rootScope.currentUser = {
-					tokenId: data.id,
-					id: data.userId,
-					email: data.user.email,
-					userName: data.user.username,
-					showName: data.user.username || data.user.email
-				};
-				$state.go('home');
-			}, function(err) {
-				alert('Login is failed');
-			})
+			if(!enter) {
+				enter = true;
+				loginForm.sendBtn.disabled = true;
+				User.login({
+					username: _name,
+					email: _email,
+					password: this.password
+				}, function(data) {
+					$rootScope.currentUser = {
+						tokenId: data.id,
+						id: data.userId,
+						email: data.user.email,
+						userName: data.user.username,
+						showName: data.user.username || data.user.email,
+						socials: data.socials
+					};
+					$state.go('home');
+				}, function(err) {
+					loginForm.sendBtn.disabled = false;
+					enter = false;
+					alert('Login is failed');
+				});
+			}
 		}
 	}
 }])

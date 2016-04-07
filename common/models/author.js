@@ -1,3 +1,5 @@
+var async = require('async');
+
 module.exports = function(Author) {
   var twitter = require('twitter'),
   twitterClient,
@@ -26,36 +28,42 @@ module.exports = function(Author) {
     }
   );
 
-  var twitterConnect = function(key, secret_key, cb) {
+  var twitterConnect = function(id, key, secret_key, cb) {
     twitterClient = new twitter({
       consumer_key: "ywPwAvJmU3by3asRWQGu0WJOh",
       consumer_secret: "Gr3cI0n66C1CWpBG732ATHpsb0AebDAZZ2xGOKpkFevnY2RJlS",
       access_token_key: key,
       access_token_secret: secret_key
     });
-    // twitterClient.get('account/verify_credentials', function(error, twit_data) {
-    //   var _res = false;
-    //   error ? twitterClient = undefined : twitterClient.user = _res = twit_data;
-    //   cb(_res);
-    // });
+    twitterClient.get('account/verify_credentials', function(error, twit_data) {
+      var _res = false;
+      if(error) {
+        socialClients.twitter = twitterClient = undefined;
+        Author.upsert({
+          id: id,
+          twitter_key: null,
+          twitter_secret_key: null
+        });
+      } else socialClients.twitter = _res = twit_data.screen_name;
+      cb(_res);
+    });
   };
 
-  Author.connect = function(id, provider, key, secret_key, cb) {
-    var update,
-    socials = {
-      twitter: {
-        twitter_key: key,
-        twitter_secret_key: secret_key
-      }
-    };
-    update = socials[provider];
-    if(update) {
-      update.id = id;
-      Author.upsert(update, function(err, instance) {
+  Author.connect = function(id, provider, key, secret_key, cb) {  
+    if(socialClients.hasOwnProperty(provider)) {
+      var params = {};
+      params["id"] = id;
+      params[provider+"_key"] = key;
+      params[provider+"_secret_key"] = secret_key;
+      Author.upsert(params, function(err, instance) {
         if(!err) {
-          twitterConnect(key, secret_key, function(_res) {
-            _res ? cb(null, _res) : cb("Tokens insert, but twitter connect problem.");
-          });
+          switch(provider) {
+            case "twitter":
+            twitterConnect(id, key, secret_key, function(_res) {
+              _res ? cb(null, _res) : cb("Twitter connect problem.");
+            });
+            break;
+          }
         } else {
           cb("Insert tokens problem");
         }
@@ -77,14 +85,25 @@ module.exports = function(Author) {
   );
 
   Author.isConnected = function(id, cb) {
-    Author.findById(id, function(err, res) {
-      if(err) {
-        cb(err);
-      } else {
-        var socials = {};
-        if(twitterClient) socials.twitter=twitterClient.user.screen_name;
-        cb(null, socials);
-      }
+    Author.findById(id, function(err, data) {
+      if(!err) {
+        async.parallel({
+          twitter: async.apply(_twitter)
+        }, function(err, res) {
+          cb(null, socialClients);
+        });
+
+        function _twitter(cb) {
+          if(data.twitter_key && data.twitter_secret_key) {
+            twitterConnect(id, data.twitter_key,data.twitter_secret_key, function(_res) {
+              cb(null, _res);
+            });
+          } else {
+            twitterClient = socialClients.twitter = undefined;
+            cb(null, false);
+          }
+        }
+      } else cb(err);
     });
   };
   Author.remoteMethod(
@@ -97,37 +116,72 @@ module.exports = function(Author) {
     }
   );
 
-  Author.afterRemote('login', function(context, res, next) {
-    if(res) {
-      Author.findById(res.userId, function(err, data) {
-        if(!err) {
-          if(data.twitter_key && data.twitter_secret_key) {
-            twitterConnect(data.twitter_key,data.twitter_secret_key, function(_res) {
-              if(_res) {
-                console.log("Twitter connected: "+twitterClient.user.screen_name);
-                res.twitter = twitterClient.user.screen_name;
-                next();
-              } else {
-                console.log("Twitter not connect.");
-                next();
-              }
-            });
-          } else next();
-        } else next();
-      });
-    } else next();
-  });
-
-  Author.afterRemote('**.__create__posts', function(context, remoteMethodOutput, next) {
-    var res = context.result;
-
-    if(res && res.socials.length && twitterClient) {
-      twitterClient.get('account/verify_credentials', function(error, twit_data, _res) {
-        console.log(twit_data.name);
+  Author.disconnect = function(id, provider, cb) {
+    if(!socialClients[provider]) cb("NOT_CONNECTED"); else {
+      var params = {};
+      params["id"] = id;
+      params[provider + "_key"] = null;
+      params[provider + "_secret_key"] = null;
+      Author.upsert(params, function(err, instance) {
+        if(err) cb(err); else {
+          var name = "";
+          switch(provider) {
+            case "twitter":
+              name = socialClients.twitter;
+              twitterClient = socialClients.twitter = undefined;
+            break;
+          }
+          cb(null, name);
+        }
       });
     }
+  };
 
-    next();
+  Author.remoteMethod(
+    'disconnect',
+    {
+      description: 'Disconnect social network.',
+      http: {path: '/:id/disconnect', verb: 'post'},
+      accepts: [
+        {arg: 'id', type: 'number', required: true, http: {source: 'path'}},
+        {arg: 'provider', type: 'string', required: true}],
+      returns: {arg: 'disconnected', type: 'boolean'}
+    }
+  );
+
+  Author.afterRemote('login', function(context, res, next) {
+    Author.isConnected(res.userId, function() {
+      res.socials = socialClients;
+      next();
+    });
   });
 
+  Author.afterRemote('**.__create__posts', function(context, res, next) {
+    if(res && res.socials.length) {
+      async.parallel({
+        twitter: async.apply(_twitter)
+      }, function(err, _res) {
+        res.send_socials = {};
+        if(!err) {
+          res.send_socials = {
+            twitter: _res.twitter
+          }
+        } else res.send_socials.error = err;
+
+        next();
+      });
+
+      function _twitter(cb) {
+        for(var key in res.socials)
+          if(res.socials[key]==="twitter" && twitterClient) {
+            twitterClient.post('statuses/update', {status: res.text}, function(err, tweet, _res) {
+              var send = false;
+              if(!err) send = true;
+              cb(null, send);
+            });
+            break;
+          } else cb(null, false);
+      }
+    } else next();
+  });
 };

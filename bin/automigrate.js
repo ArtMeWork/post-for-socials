@@ -7,9 +7,9 @@ ds.automigrate(['author', 'post'], function(err) {
 
   var authors = [{
     email: "meridos@mail.ru",
-    password: "admintema10242"
+    password: "admintema"
   }],
-      posts = [{text:"Hello world!"}],
+      posts = [{text:"Hello world!", date: Date.now(), authorId: 1}],
       count = authors.length + posts.length;
   authors.forEach(function(data) {
     app.models.author.create(data, function(err, model) {

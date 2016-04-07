@@ -5,17 +5,17 @@
 			<div>
 				<label>Добавить социальную сеть:</label>
 			</div>
-			<input type="button" class="btn btn-success ng-hide" ng-hide="currentUser.twitter" ng-click="connect()" value="Connect Twitter">
+			<input type="button" class="btn btn-success ng-hide" ng-hide="currentUser.socials.twitter" ng-click="connect()" value="Connect Twitter">
 		</div>
 		<div class="form-group">
 			<div>
 				<label>Подключенные социальные сети:</label>
 			</div>
-			<blockquote class="ng-hide" ng-show="!currentUser.twitter&&!currentUser.vkontakte&&!currentUser.facebook">
+			<blockquote class="ng-hide" ng-show="!currentUser.socials.twitter&&!currentUser.socials.vkontakte&&!currentUser.socials.facebook">
 				<p>Вы не добавили ни одну социальную сеть.</p>
 			</blockquote>
-			<blockquote class="ng-hide" ng-show="currentUser.twitter">
-				<p><b>Twitter:</b> <span ng-bind="currentUser.twitter"></span>  <a href="" class="pull-right" ng-click="remove()"><span class="glyphicon glyphicon-remove" aria-hidden="true"></span></a></p>				
+			<blockquote class="ng-hide" ng-show="currentUser.socials.twitter">
+				<p><b>Twitter:</b> <span ng-bind="currentUser.socials.twitter"></span>  <a href="" class="pull-right" ng-click="disconnect('twitter')"><span class="glyphicon glyphicon-remove" aria-hidden="true"></span></a></p>				
 			</blockquote>
 		</div>
 		<br>

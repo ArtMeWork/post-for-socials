@@ -1,8 +1,6 @@
 module.exports = function(Post) {
-	Post.beforeRemote('create', function(context, user, next) {
-		var req = context.req;
-		req.body.date = Date.now();
-		req.body.authorId = req.accessToken.userId;
+	Post.observe('before save', function(context, next) {
+		context.instance.date = Date.now();
 		next();
-	});
+	});	
 };

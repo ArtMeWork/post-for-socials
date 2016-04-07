@@ -52,6 +52,10 @@ app
 			id: _userId
 		};
 
+		socialsService.setCredentials({
+			twitter: "Gu74r20E9GstEHuQU_qneaw7OVI"
+		});
+
 		User.findById({
 			id: _userId
 		}, function(data) {
@@ -60,15 +64,18 @@ app
 				id: _userId,
 				email: data.email,
 				userName: data.username,
-				showName: data.username || data.email
+				showName: data.username || data.email,
+				socials: {}
 			};
 			socialsService.isConnected();
 		},
-		function() {
-			localStorage.setItem('$LoopBack$accessTokenId',''),
-			localStorage.setItem('$LoopBack$currentUserId','');
-			$rootScope.currentUser = null;
-			$state.go('login');
+		function(err) {
+			if(err.data.error.code==="AUTHORIZATION_REQUIRED") {
+				localStorage.setItem('$LoopBack$accessTokenId',''),
+				localStorage.setItem('$LoopBack$currentUserId','');
+				$rootScope.currentUser = null;
+				$state.go('login');
+			}
 		});
 	}
 
@@ -80,11 +87,24 @@ app
   });
 }])
 .factory('socialsService', ['$q', '$rootScope', 'Author', function($q, $rootScope, User) {
+	var priv = {
+		apps_id: {},
+		remember: function(provider, name) {
+			if(!provider && typeof name === "object") {
+				$rootScope.currentUser.socials = name;
+			} else
+			if(provider && name)
+				$rootScope.currentUser.socials[provider] = name;
+		}
+	};
 	var pub = {
+		setCredentials: function(credentials) {
+			priv.apps_id = credentials;
+		},
 		connect: function(provider) {
 			var defer = $q.defer();
-			OAuth.initialize('Gu74r20E9GstEHuQU_qneaw7OVI');
-			OAuth.popup(provider, {cache:false, state: "U3hCQ7Ogq5qmi6T0uu4Zq7fJWYtfaiqS8Pagczy"}, function(error, result) {
+			OAuth.initialize(priv.apps_id[provider]);
+			OAuth.popup(provider, {cache:false}, function(error, result) {
 				if (!error) {
 					User.connect({
 		  			id: $rootScope.currentUser.id,
@@ -92,8 +112,7 @@ app
 		  			key: result.oauth_token,
 		  			secret_key: result.oauth_token_secret
 		  		}).$promise.then(function(data) {
-		  			$rootScope.currentUser[provider] = data.connected.screen_name;
-		  			pub.remember(provider, data.connected.screen_name);
+		  			priv.remember(provider, data.connected);
 		  			defer.resolve(data);
 		  		}, function(err) {
 		  			alert('Ошибка записи данных');
@@ -108,18 +127,25 @@ app
 			});
 			return defer.promise;
 		},
-		remember: function(provider, name) {
-			localStorage.setItem('connect_'+provider, name);
-			$rootScope.currentUser[provider] = name;
-		},
 		isConnected: function() {
+			var defer = $q.defer();
 			User.isConnected({
 				id: $rootScope.currentUser.id
 			}).$promise.then(function(socials) {
-				for(var provider in socials.connected) {
-					pub.remember(provider, socials.connected[provider]);
-				}
+				priv.remember(null, socials.connected);
+				defer.resolve(socials);
+			}, function(err) {
+				defer.reject(err);
 			});
+			return defer.promise;
+		},
+		disconnect: function(provider) {
+			var defer = $q.defer();
+			User.disconnect({
+				id: $rootScope.currentUser.id,
+				provider: provider
+			}, defer.resolve, defer.reject);
+			return defer.promise;
 		}
 	};
 

@@ -1,18 +1,18 @@
 <div class="panel panel-primary">
 	<div class="panel-heading">Создать новый пост</div>
 	<div class="panel-body">
-		<form class="form-horizontal" name="postForm" ng-submit="postForm.$valid && newPost.send()">
+		<form class="form-horizontal" name="postForm" ng-submit="postForm.$valid && newPost.send()" novalidate>
 			<div class="form-group">
 				<div class="col-xs-12">
 					<textarea ng-model="newPost.text" class="form-control" rows="3" placeholder="Напишите что-нибудь..." required></textarea>
 				</div>
 			</div>
-			<div class="form-group">
+			<div class="form-group ng-hide" ng-show="currentUser.socials.vkontakte || currentUser.socials.facebook || currentUser.socials.twitter">
 				<div class="col-xs-12">
 					<ul class="share-socials">
-						<li ng-class="{active: newPost.socials.indexOf(1) !== -1}" ng-click="newPost.check(1)" class="vkontakte"><span class="glyphicon glyphicon-ok"></span></li>
-						<li ng-class="{active: newPost.socials.indexOf(2) !== -1}" ng-click="newPost.check(2)" class="facebook"><span class="glyphicon glyphicon-ok"></span></li>
-						<li ng-class="{active: newPost.socials.indexOf(3) !== -1}" ng-click="newPost.check(3)" class="twitter"><span class="glyphicon glyphicon-ok"></span></li>
+						<li ng-class="{active: newPost.socials.indexOf('vkontakte') !== -1}" ng-show="currentUser.socials.vkontakte" ng-click="newPost.check('vkontakte')" class="vkontakte"><span class="glyphicon glyphicon-ok"></span></li>
+						<li ng-class="{active: newPost.socials.indexOf('facebook') !== -1}" ng-show="currentUser.socials.facebook" ng-click="newPost.check('facebook')" class="facebook"><span class="glyphicon glyphicon-ok"></span></li>
+						<li ng-class="{active: newPost.socials.indexOf('twitter') !== -1}" ng-show="currentUser.socials.twitter" ng-click="newPost.check('twitter')" class="twitter"><span class="glyphicon glyphicon-ok"></span></li>
 					</ul>
 				</div>
 			</div>

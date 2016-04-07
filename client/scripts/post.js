@@ -1,5 +1,5 @@
 app
-.controller('MyPostCtrl', ['$scope', '$rootScope', 'Author', 'Post', function ($scope, $rootScope, User, Post) {
+.controller('MyPostCtrl', ['$scope', '$rootScope', 'Author', function ($scope, $rootScope, User) {
 
 	$scope.posts = null;
 
@@ -21,13 +21,16 @@ app
 			$scope.newPost.socials.splice($scope.newPost.socials.indexOf(item), 1);
 		},
 		send: function() {
-			User.posts.create({id:$rootScope.currentUser.id},{
+			User.posts.create({id:$rootScope.currentUser.id}, {
 				text: $scope.newPost.text,
 				socials: $scope.newPost.socials
-			}, function() {
+			}, function(data) {
 				$scope.newPost.text = null;
 				$scope.newPost.socials = [];
 				getPosts();
+				if(data.socials.length)
+					for(var provider in data.send_socials)
+						if(!data.send_socials) alert("Ошибка отправки в "+provider);
 			});
 		}
 	};
