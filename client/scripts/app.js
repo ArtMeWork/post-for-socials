@@ -43,12 +43,13 @@ app
 		});
 }])
 .run(['$rootScope', '$state', 'Author', 'socialsService', function($rootScope, $state, User, socialsService) {
+	
 	socialsService.setCredentials({
 		app_id: "Gu74r20E9GstEHuQU_qneaw7OVI",
 		twitter: function(result) {
 			return {
-				twitter_key: result.oauth_token,
-				twitter_secret_key: result.oauth_token_secret
+				access_token_key: result.oauth_token,
+				access_token_secret: result.oauth_token_secret
 			}
 		},
 		facebook: function(result) {
@@ -57,6 +58,7 @@ app
 			}
 		}
 	});
+
 	if (localStorage.getItem('$LoopBack$accessTokenId')) {
 		var _token = localStorage.getItem('$LoopBack$accessTokenId'),
 				_userId = localStorage.getItem('$LoopBack$currentUserId');
