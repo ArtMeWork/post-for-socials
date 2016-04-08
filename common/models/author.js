@@ -13,11 +13,6 @@ module.exports = function(Author) {
         twitter: function() {
           var _this = {};
           _this.sdk = null;
-          _this.me = function(cb) {
-            _this.sdk.get('account/verify_credentials', function(error, twit_data) {
-              error ? cb(error) : cb(null, twit_data.screen_name);
-            });
-          };
           
           return {
             connect: function(params, cb) {
@@ -27,12 +22,43 @@ module.exports = function(Author) {
                 access_token_key: params.access_token_key,
                 access_token_secret: params.access_token_secret
               });
-              _this.me(cb);
+              _this.sdk.get('account/verify_credentials', function(error, twit_data) {
+                error ? cb(error) : cb(null, {
+                  id: twit_data.screen_name,
+                  name: twit_data.name
+                });
+              });
             },
             send: function(text, cb) {
               _this.sdk.post('statuses/update', {status: text}, function(err, tweet, _res) {
                 err ? cb(null, false) : cb(null, true);
               });
+            }
+          }
+        },
+        facebook: function() {
+          var _this = {};
+          _this.sdk = facebook;
+          _this.me = function(cb) {
+            /*_this.sdk.get('account/verify_credentials', function(error, twit_data) {
+              error ? cb(error) : cb(null, twit_data.screen_name);
+            });*/
+          };
+          
+          return {
+            connect: function(params, cb) {
+              _this.sdk.setAccessToken(params.access_token);
+              _this.sdk.api('/me', function (res) {
+                !res || res.error ?
+                  cb(!res ? 'error occurred' : res.error) :
+                  cb(null, res);
+              });
+            },
+            send: function(text, cb) {
+              cb(null, _this.sdk);
+              /*_this.sdk.post('statuses/update', {status: text}, function(err, tweet, _res) {
+                err ? cb(null, false) : cb(null, true);
+              });*/
             }
           }
         },
@@ -150,7 +176,8 @@ module.exports = function(Author) {
     twitter: {
       consumer_key: "ywPwAvJmU3by3asRWQGu0WJOh",
       consumer_secret: "Gr3cI0n66C1CWpBG732ATHpsb0AebDAZZ2xGOKpkFevnY2RJlS",
-    }
+    },
+    facebook: {}
   });
 
 	Author.usernameExist = function(username, cb) {
@@ -232,7 +259,8 @@ module.exports = function(Author) {
       var _providers = {};
       socials.enabled().forEach(function(_provider) {
         _providers[_provider] = async.apply(function(cb) {
-          socials.api(res.authorId, _provider).send(res.text, cb);
+          // socials.api(res.authorId, _provider).send(res.text, cb);
+        cb(null, true);
         });
       });
       async.parallel(_providers, function(err, _res) {

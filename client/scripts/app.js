@@ -54,7 +54,7 @@ app
 		},
 		facebook: function(result) {
 			return {
-				facebook_token: result.access_token
+				access_token: result.access_token
 			}
 		}
 	});
