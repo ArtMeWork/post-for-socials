@@ -102,12 +102,11 @@ app
 .factory('socialsService', ['$q', '$rootScope', 'Author', function($q, $rootScope, User) {
 	var priv = {
 		credentials: {},
-		remember: function(provider, name) {
-			if(!provider && typeof name === "object") {
-				$rootScope.currentUser.socials = name;
-			} else
-			if(provider && name)
-				$rootScope.currentUser.socials[provider] = name;
+		remember: function(provider, user) {
+			provider && typeof user === "object" ?
+				$rootScope.currentUser.socials[provider] = user :
+				!provider && typeof user === "object" ?
+					$rootScope.currentUser.socials = user : false;
 		}
 	};
 	var pub = {

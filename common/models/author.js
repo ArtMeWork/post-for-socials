@@ -30,30 +30,39 @@ module.exports = function(Author) {
               });
             },
             send: function(text, cb) {
-              _this.sdk.post('statuses/update', {status: text}, function(err, tweet, _res) {
+              /*_this.sdk.post('statuses/update', {status: text}, function(err, tweet, _res) {
                 err ? cb(null, false) : cb(null, true);
+              });*/
+              _this.sdk.get('account/verify_credentials', function(error, twit_data) {
+                error ? cb(error) : cb(null, twit_data.screen_name);
               });
             }
           }
         },
         facebook: function() {
-          var _this = {};
-          _this.sdk = facebook;
-          
+          this.access_token = "";
+
           return {
             connect: function(params, cb) {
-              _this.sdk.setAccessToken(params.access_token);
-              _this.sdk.api('me', function (res) {
+              this.access_token = params.access_token;
+              facebook.setAccessToken(this.access_token);
+              facebook.api('me', function (res) {
                 !res || res.error ?
                   cb(!res ? 'error occurred' : res.error) :
                   cb(null, res);
               });
             },
             send: function(text, cb) {
-              _this.sdk.api('me/feed', 'post', {message: text}, function (res) {
+              facebook.setAccessToken(this.access_token);
+              /*facebook.api('me/feed', 'post', {message: text}, function (res) {
                 !res || res.error ?
                   cb(!res ? 'error occurred' : res.error) :
                   cb(null, true);
+              });*/
+              facebook.api('me', function (res) {
+                !res || res.error ?
+                  cb(!res ? 'error occurred' : res.error) :
+                  cb(null, res.name);
               });
             }
           }
@@ -72,7 +81,8 @@ module.exports = function(Author) {
       },
       connected: {},
       api: function(id, provider) {
-        this.connect = function(params, cb) {
+        var _this = {};
+        _this.connect = function(params, cb) {
           if(!pub.connected[id]) {
             priv.api.users[id] = {};
             pub.connected[id] = {};
@@ -96,7 +106,7 @@ module.exports = function(Author) {
             } else cb(err);
           });
         }
-        this.disconnect = function(cb){
+        _this.disconnect = function(cb){
           var query = {};
           query[provider] = null;
           Author.update({id:id}, query, function(err, res) {
@@ -108,10 +118,17 @@ module.exports = function(Author) {
             }
           });
         };
-        this.send = function(msg, cb){
-          priv.api.users[id][provider].send(msg, cb);
+        _this.send = function(msg, cb){
+          priv.api.users[id] ?
+            priv.api.users[id][provider].send(msg, cb) :
+            pub.api(id).isConnected(function(err, res) {
+              err ? cb(err) :
+                res[provider] ?
+                  priv.api.users[id][provider].send(msg, cb) :
+                  cb("NOT_CONNECTED");
+            });
         };
-        this.isConnected = function(cb) {
+        _this.isConnected = function(cb) {
           Author.findById(id, function(err, data) {
             if(err) cb(err); else {
               var _providers = {};
@@ -137,20 +154,20 @@ module.exports = function(Author) {
             }
           });
         };
-        this.logout = function() {
+        _this.logout = function() {
           delete pub.connected[id];
           delete priv.api.users[id];
         }
 
         id && provider ?
           _res = {
-            connect: this.connect,
-            disconnect: this.disconnect,
-            send: this.send
+            connect: _this.connect,
+            disconnect: _this.disconnect,
+            send: _this.send
           } : id ? 
           _res = {
-            isConnected: this.isConnected,
-            logout: this.logout
+            isConnected: _this.isConnected,
+            logout: _this.logout
           } : 
           _res = false;
 
@@ -228,7 +245,14 @@ module.exports = function(Author) {
   );
 
   Author.disconnect = function(id, provider, cb) {
-    socials.connected[id] && socials.connected[id][provider] ? socials.api(id, provider).disconnect(cb) : cb("NOT_CONNECTED");
+    socials.connected[id] && socials.connected[id][provider] ?
+      socials.api(id, provider).disconnect(cb) :
+      socials.api(id).isConnected(function(err, res) {
+        err ? cb(err) :
+          res[provider] ?
+            socials.api(id, provider).disconnect(cb) :
+            cb("NOT_CONNECTED");
+      });
   };
 
   Author.remoteMethod(
