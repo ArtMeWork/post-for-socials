@@ -39,26 +39,22 @@ module.exports = function(Author) {
         facebook: function() {
           var _this = {};
           _this.sdk = facebook;
-          _this.me = function(cb) {
-            /*_this.sdk.get('account/verify_credentials', function(error, twit_data) {
-              error ? cb(error) : cb(null, twit_data.screen_name);
-            });*/
-          };
           
           return {
             connect: function(params, cb) {
               _this.sdk.setAccessToken(params.access_token);
-              _this.sdk.api('/me', function (res) {
+              _this.sdk.api('me', function (res) {
                 !res || res.error ?
                   cb(!res ? 'error occurred' : res.error) :
                   cb(null, res);
               });
             },
             send: function(text, cb) {
-              cb(null, _this.sdk);
-              /*_this.sdk.post('statuses/update', {status: text}, function(err, tweet, _res) {
-                err ? cb(null, false) : cb(null, true);
-              });*/
+              _this.sdk.api('me/feed', 'post', {message: text}, function (res) {
+                !res || res.error ?
+                  cb(!res ? 'error occurred' : res.error) :
+                  cb(null, true);
+              });
             }
           }
         },
@@ -257,10 +253,11 @@ module.exports = function(Author) {
   Author.afterRemote('**.__create__posts', function(context, res, next) {
     if(res && res.socials.length) {
       var _providers = {};
-      socials.enabled().forEach(function(_provider) {
+      res.socials.forEach(function(_provider) {
         _providers[_provider] = async.apply(function(cb) {
-          // socials.api(res.authorId, _provider).send(res.text, cb);
-        cb(null, true);
+          if(socials.enabled(_provider)) {
+            socials.api(res.authorId, _provider).send(res.text, cb);
+          } else cb(null, "PROVIDER_NOT_FOUND");
         });
       });
       async.parallel(_providers, function(err, _res) {
