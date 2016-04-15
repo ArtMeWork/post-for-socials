@@ -1,15 +1,10 @@
 app
 .controller('SettingsUserCtrl', ['$scope', 'Author', '$rootScope', 'socialsService', function($scope, User, $rootScope, socialsService) {
+
   $scope.connect = function(provider) {
   	socialsService.connect(provider);
   };
-  $scope.disconnect = function(provider) {
-  	socialsService.disconnect(provider).then(function(res) {
-  		$rootScope.currentUser.socials[provider] = null;
-  	}, function(err){
-  		if(err.data.error=="NOT_CONNECTED") alert(err.config.data.provider + " не был подключен."); else console.log("Ошибка отключения " + err.config.data.provider, err);
-  	});
-  };
+  $scope.disconnect = socialsService.disconnect;
 
 	var defaultSettings = angular.copy($scope.settings);
 	$scope.settings = {

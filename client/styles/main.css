@@ -61,7 +61,6 @@ form:not([novalidate]) .ng-dirty.ng-invalid:focus {
   letter-spacing: -5px;
 }
 .share-socials li {
-  display: none;
   margin-right: 10px;
   width: 50px;
   height: 50px;
@@ -80,6 +79,9 @@ form:not([novalidate]) .ng-dirty.ng-invalid:focus {
 }
 .share-socials li.twitter {
   background-position: -100px 0;
+}
+.share-socials li.vk {
+  background-position: 0 0;
 }
 .share-socials li:hover, .share-socials li.active {
   border: 3px solid #00E412;
@@ -101,6 +103,25 @@ form:not([novalidate]) .ng-dirty.ng-invalid:focus {
   height: 15px;
   background: #00E412;
   border-radius: 0 0 5px 0;
+}
+
+.sended-socials {
+  display: inline-block;
+  width: 20px;
+  height: 20px;
+  border-radius: 3px;
+  background: url('../images/sprite-socials.png') no-repeat 0 0;
+  background-size: cover;
+  margin-right: 5px;
+}
+.sended-socials.facebook {
+  background-position: -20px 0;
+}
+.sended-socials.twitter {
+  background-position: -40px 0;
+}
+.sended-socials.vk {
+  background-position: 0 0;
 }
 
 @media (max-width: 767px) {

@@ -11,64 +11,52 @@ module.exports = function(Author) {
       credentials: {},
       api: {
         twitter: function() {
-          var _this = {};
-          _this.sdk = null;
-          
-          return {
-            connect: function(params, cb) {
-              _this.sdk = new twitter({
-                consumer_key: priv.credentials.twitter.consumer_key,
-                consumer_secret: priv.credentials.twitter.consumer_secret,
-                access_token_key: params.access_token_key,
-                access_token_secret: params.access_token_secret
-              });
-              _this.sdk.get('account/verify_credentials', function(error, twit_data) {
-                error ? cb(error) : cb(null, {
-                  id: twit_data.screen_name,
-                  name: twit_data.name
-                });
-              });
-            },
-            send: function(text, cb) {
-              /*_this.sdk.post('statuses/update', {status: text}, function(err, tweet, _res) {
-                err ? cb(null, false) : cb(null, true);
-              });*/
-              _this.sdk.get('account/verify_credentials', function(error, twit_data) {
-                error ? cb(error) : cb(null, twit_data.screen_name);
-              });
-            }
-          }
+          this.sdk = null;
         },
         facebook: function() {
           this.access_token = "";
-
-          return {
-            connect: function(params, cb) {
-              this.access_token = params.access_token;
-              facebook.setAccessToken(this.access_token);
-              facebook.api('me', function (res) {
-                !res || res.error ?
-                  cb(!res ? 'error occurred' : res.error) :
-                  cb(null, res);
-              });
-            },
-            send: function(text, cb) {
-              facebook.setAccessToken(this.access_token);
-              /*facebook.api('me/feed', 'post', {message: text}, function (res) {
-                !res || res.error ?
-                  cb(!res ? 'error occurred' : res.error) :
-                  cb(null, true);
-              });*/
-              facebook.api('me', function (res) {
-                !res || res.error ?
-                  cb(!res ? 'error occurred' : res.error) :
-                  cb(null, res.name);
-              });
-            }
-          }
         },
         users: {}
       }
+    };
+    priv.api.twitter.prototype.connect = function(params, cb) {
+      this.sdk = new twitter({
+        consumer_key: priv.credentials.twitter.consumer_key,
+        consumer_secret: priv.credentials.twitter.consumer_secret,
+        access_token_key: params.access_token_key,
+        access_token_secret: params.access_token_secret
+      });
+      this.sdk.get('account/verify_credentials', function(error, twit_data) {
+        error ? cb(error) : cb(null, {
+          id: twit_data.screen_name,
+          name: twit_data.name
+        });
+      });
+    };
+    priv.api.twitter.prototype.send = function(text, cb) {
+      /*_this.sdk.post('statuses/update', {status: text}, function(err, tweet, _res) {
+        err ? cb(null, false) : cb(null, true);
+      });*/
+      this.sdk.get('account/verify_credentials', function(error, twit_data) {
+        error ? cb(error) : cb(null, twit_data.screen_name);
+      });
+    };
+    priv.api.facebook.prototype.connect = function(params, cb) {
+      this.access_token = params.access_token;
+      facebook.setAccessToken(this.access_token);
+      facebook.api('me', function (res) {
+        !res || res.error ?
+          cb(!res ? 'error occurred' : res.error) :
+          cb(null, res);
+      });
+    };
+    priv.api.facebook.prototype.send = function(text, cb) {
+      facebook.setAccessToken(this.access_token);
+      facebook.api('me/feed', 'post', {message: text}, function (res) {
+        !res || res.error ?
+          cb(!res ? 'error occurred' : res.error) :
+          cb(null, true);
+      });
     };
     var pub = {
       setCredentials: function(credentials) {
@@ -89,22 +77,22 @@ module.exports = function(Author) {
             priv.enabled.forEach(function(e){
               pub.connected[id][e] = false;
             });
+          } else pub.connected[id][provider] = false;
+          if(!params) cb(null, false); {
             priv.api.users[id][provider] = new priv.api[provider];
-          } else if(!pub.connected[id][provider])
-            priv.api.users[id][provider] = new priv.api[provider];
-
-          priv.api.users[id][provider].connect(params, function(err, res) {
-            if(!err) {
-              pub.connected[id][provider] = res;
-              if(params.notupdate) cb(null, res); else {
-                var query = {};
-                query[provider] = params;
-                Author.update({id:id}, query, function(err) {
-                  err ? cb(err) : cb(null, res);
-                });
-              }
-            } else cb(err);
-          });
+            priv.api.users[id][provider].connect(params, function(err, res) {
+              if(!err) {
+                pub.connected[id][provider] = res;
+                if(params.notupdate) cb(null, res); else {
+                  var query = {};
+                  query[provider] = params;
+                  Author.update({id:id}, query, function(err) {
+                    err ? cb(err) : cb(null, res);
+                  });
+                }
+              } else cb(err);
+            });
+          }
         }
         _this.disconnect = function(cb){
           var query = {};
@@ -119,7 +107,7 @@ module.exports = function(Author) {
           });
         };
         _this.send = function(msg, cb){
-          priv.api.users[id] ?
+          priv.api.users[id] && priv.api.users[id][provider] ?
             priv.api.users[id][provider].send(msg, cb) :
             pub.api(id).isConnected(function(err, res) {
               err ? cb(err) :
@@ -280,13 +268,16 @@ module.exports = function(Author) {
       res.socials.forEach(function(_provider) {
         _providers[_provider] = async.apply(function(cb) {
           if(socials.enabled(_provider)) {
-            socials.api(res.authorId, _provider).send(res.text, cb);
+            socials.api(res.authorId, _provider).send(res.text, function(err, _res) {
+              cb(null, {error: err, success: _res});
+            });
           } else cb(null, "PROVIDER_NOT_FOUND");
         });
       });
       async.parallel(_providers, function(err, _res) {
-        res.send_socials = {};
-        err ? res.send_socials.error = err : res.send_socials = _res;
+        res.send_socials = _res;
+        for(var key in _res)
+          if(_res[key].error) res.socials.splice(res.socials.indexOf(key),1);
         next();
       });
     } else next();

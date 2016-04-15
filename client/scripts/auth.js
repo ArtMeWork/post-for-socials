@@ -41,7 +41,7 @@ app
 						email: data.user.email,
 						userName: data.user.username,
 						showName: data.user.username || data.user.email,
-						socials: data.socials
+						socials: socialsService.socials(data.socials)
 					};
 					$state.go('home');
 				}, function(err) {

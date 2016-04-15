@@ -46,15 +46,22 @@ app
 	
 	socialsService.setCredentials({
 		app_id: "Gu74r20E9GstEHuQU_qneaw7OVI",
-		twitter: function(result) {
-			return {
-				access_token_key: result.oauth_token,
-				access_token_secret: result.oauth_token_secret
-			}
-		},
-		facebook: function(result) {
-			return {
-				access_token: result.access_token
+		socials: {
+			twitter: function(result) {
+				return {
+					access_token_key: result.oauth_token,
+					access_token_secret: result.oauth_token_secret
+				}
+			},
+			facebook: function(result) {
+				return {
+					access_token: result.access_token
+				}
+			},
+			vk: function(result) {
+				return {
+					access_token: result.access_token
+				}
 			}
 		}
 	});
@@ -68,7 +75,6 @@ app
 			id: _userId
 		};
 
-
 		User.findById({
 			id: _userId
 		}, function(data) {
@@ -78,7 +84,7 @@ app
 				email: data.email,
 				userName: data.username,
 				showName: data.username || data.email,
-				socials: {}
+				socials: socialsService.socials()
 			};
 			socialsService.isConnected();
 		},
@@ -100,16 +106,17 @@ app
   });
 }])
 .factory('socialsService', ['$q', '$rootScope', 'Author', function($q, $rootScope, User) {
-	var priv = {
+	var priv, pub, socials;
+	priv = {
 		credentials: {},
 		remember: function(provider, user) {
 			provider && typeof user === "object" ?
 				$rootScope.currentUser.socials[provider] = user :
 				!provider && typeof user === "object" ?
-					$rootScope.currentUser.socials = user : false;
+					$rootScope.currentUser.socials.connected = user : false;
 		}
 	};
-	var pub = {
+	pub = {
 		setCredentials: function(credentials) {
 			priv.credentials = credentials;
 		},
@@ -122,7 +129,7 @@ app
 					User.connect({
 		  			id: $rootScope.currentUser.id,
 		  			provider: provider,
-		  			params: priv.credentials[provider](result)
+		  			params: priv.credentials.socials[provider](result)
 		  		}).$promise.then(function(data) {
 		  			priv.remember(provider, data.connected);
 		  			defer.resolve(data);
@@ -156,8 +163,53 @@ app
 			User.disconnect({
 				id: $rootScope.currentUser.id,
 				provider: provider
-			}, defer.resolve, defer.reject);
+			}, function(res) {
+				$rootScope.currentUser.socials[provider] = false;
+				defer.resolve(res);
+			}, function(err) {
+				if(typeof err==="object" && err.data.error.message==="NOT_CONNECTED") {
+					$rootScope.currentUser.socials[provider] = false;
+					defer.resolve();
+				} else {
+					alert("Ошибка отключения " + err.config.data.provider + err);
+					console.log("Ошибка отключения " + err.config.data.provider, err);
+					defer.reject(err);
+				}
+			});
 			return defer.promise;
+		},
+		socials: function(enabled) {
+			var socials = {};
+			if(!enabled)
+				Object.keys(priv.credentials.socials).forEach(function(social) {
+					socials[social] = false;
+				});
+			else if(typeof enabled==="object")
+				for(var key in enabled)
+					socials[key] = enabled[key];
+			Object.defineProperty(socials, 'enabled', {
+				enumerable: false,
+				configurable: false,
+				get: function() {
+					return Object.keys(socials).length;
+				}
+			});
+			Object.defineProperty(socials, 'connected', {
+				enumerable: false,
+				configurable: false,
+				get: function() {
+					var count = 0;
+					for(var key in socials)
+						if(socials[key])
+							count++;
+					return count;
+				},
+				set: function(newSocials) {
+					for(var key in newSocials)
+						socials[key] = newSocials[key];
+				}
+			});
+			return socials;
 		}
 	};
 

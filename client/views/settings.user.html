@@ -1,20 +1,18 @@
 <div class="panel panel-primary">
 	<div class="panel-heading">Настройки профиля</div>
 	<div class="panel-body">
-		<div class="form-group">
+		<div class="form-group ng-hide" ng-hide="currentUser.socials.connected===currentUser.socials.enabled">
 			<div>
 				<label>Добавить социальную сеть:</label>
 			</div>
 			<input type="button" class="btn btn-success ng-hide" ng-hide="currentUser.socials.twitter" ng-click="connect('twitter')" value="Connect Twitter">
 			<input type="button" class="btn btn-success ng-hide" ng-hide="currentUser.socials.facebook" ng-click="connect('facebook')" value="Connect Facebook">
+			<!-- <input type="button" class="btn btn-success ng-hide" ng-hide="currentUser.socials.vk" ng-click="connect('vk')" value="Connect Vkontakte"> -->
 		</div>
-		<div class="form-group">
+		<div class="form-group ng-hide" ng-show="currentUser.socials.connected>0">
 			<div>
 				<label>Подключенные социальные сети:</label>
 			</div>
-			<blockquote class="ng-hide" ng-show="!currentUser.socials.twitter&&!currentUser.socials.vkontakte&&!currentUser.socials.facebook">
-				<p>Вы не добавили ни одну социальную сеть.</p>
-			</blockquote>
 			<blockquote class="ng-hide" ng-show="currentUser.socials.twitter">
 				<p><b>Twitter:</b> <span ng-bind="currentUser.socials.twitter.name"></span>  <a href="" class="pull-right" ng-click="disconnect('twitter')"><span class="glyphicon glyphicon-remove" aria-hidden="true"></span></a></p>				
 			</blockquote>
@@ -22,8 +20,6 @@
 				<p><b>Facebook:</b> <span ng-bind="currentUser.socials.facebook.name"></span>  <a href="" class="pull-right" ng-click="disconnect('facebook')"><span class="glyphicon glyphicon-remove" aria-hidden="true"></span></a></p>				
 			</blockquote>
 		</div>
-		<br>
-		<br>
 		<form name="settingsForm" ng-submit="settingsForm.$valid && send()">
 			<div class="form-group">
 				<label>Имя пользователя</label>

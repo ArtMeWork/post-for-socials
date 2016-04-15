@@ -33,13 +33,17 @@
 				<th>Текст</th>
 				<th>Социальные сети</th>
 				<th>Дата</th>
+				<th>Удалить</th>
 			</thead>
 			<tbody>
-				<tr ng-repeat="post in posts | orderBy:'-date'">
+				<tr ng-repeat="post in posts | orderBy: '-date'">
 					<td ng-bind="post.id"></td>
 					<td ng-bind="post.text"></td>
-					<td ng-bind="post.socials"></td>
+					<td>
+						<span class="sended-socials {{social}}" ng-repeat="social in post.socials"></span>
+					</td>
 					<td ng-bind="post.date | date:'d.MM.yyyy H:mm'"></td>
+					<td><a href="" ng-click="remove(post.id)">Удалить</a></td>
 				</tr>
 			</tbody>
 		</table>
