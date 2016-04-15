@@ -6,7 +6,6 @@ module.exports = function(grunt) {
 		loopback_sdk_angular: {
 	    services: {
 	      options: {
-      		apiUrl: 'https://post-for-socials.herokuapp.com/api',
 	        input: 'server/server.js',
 	        output: 'client/scripts/services/lb-services.js'
 	      }
