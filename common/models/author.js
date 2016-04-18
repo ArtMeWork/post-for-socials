@@ -85,8 +85,10 @@ module.exports = function(Author) {
               if(!err) {
                 pub.connected[id][provider] = res;
                 if(params.notupdate) cb(null, res); else {
-                  Author.update({id:id}, params, function(user_err) {
-                    err ? cb(user_err) : cb(null, res);
+                  var query = {};
+                  query[provider] = params;
+                  Author.update({id:id}, query, function(err) {
+                    err ? cb(err) : cb(null, res);
                   });
                 }
               } else cb(err);

@@ -31,10 +31,6 @@ app
 			controller: "LogoutAuthCtrl",
 			auth: true
 		})
-		.state('forbidden', {
-			url: "/forbidden",
-			template: "<div class='text-center'><h2>403 Access Forbidden</h2><br><p><a ui-sref='login'>Please login</a></p></div>"
-		})
 		.state('settings', {
 			url: "/settings",
 			templateUrl: "views/settings.user.html",
@@ -101,7 +97,7 @@ app
 	$rootScope.$on('$stateChangeStart', function(event, next) {
     if (next.auth && !$rootScope.currentUser) {
       event.preventDefault();
-      $state.go('forbidden');
+      $state.go('hello');
     }
   });
 }])
@@ -125,7 +121,6 @@ app
 			OAuth.initialize(priv.credentials.app_id);
 			OAuth.popup(provider, {cache: false}, function(error, result) {
 				if (!error) {
-					console.log(result);
 					User.connect({
 		  			id: $rootScope.currentUser.id,
 		  			provider: provider,

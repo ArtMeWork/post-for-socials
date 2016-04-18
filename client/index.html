@@ -20,11 +20,8 @@
 				<a class="navbar-brand" ui-sref="home">Пост для всех</a>
 			</div>
 			<div id="navbar" class="navbar-collapse collapse">
-				<ul class="nav navbar-nav">
-					<li ui-sref-active="active"><a ui-sref="home">Посты</a></li>
+				<ul class="nav navbar-nav ng-hide" ng-hide="currentUser">
 					<li ui-sref-active="active"><a ui-sref="hello">Hello</a></li>
-				</ul>
-				<ul class="nav navbar-nav navbar-right ng-hide" ng-hide="currentUser">
 					<li ui-sref-active="active"><a ui-sref="signup">Зарегистрироваться</a></li>
 					<li ui-sref-active="active"><a ui-sref="login">Войти</a></li>
 				</ul>
@@ -43,7 +40,7 @@
 			<div class="col-sm-3 hidden-xs">
 				<h3 class="site-name">Пост для всех</h3>
 				<div class="list-group">
-					<a ui-sref-active="active" ui-sref="hello" class="list-group-item">Hello</a>
+					<a ui-sref-active="active" ng-hide="currentUser" ui-sref="hello" class="list-group-item">Hello</a>
 					<a ui-sref-active="active" ng-hide="currentUser" ui-sref="signup" class="list-group-item ng-hide">Зарегистрироваться</a>
 					<a ui-sref-active="active" ng-hide="currentUser" ui-sref="login" class="list-group-item ng-hide">Войти</a>
 					<div class="list-group ng-hide" ng-show="currentUser">
