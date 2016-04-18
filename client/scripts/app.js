@@ -1,8 +1,8 @@
 'use strict';
 
-var app = angular.module('postApp', ['ui.router', 'ngResource', 'lbServices']);
+var app = angular.module('postApp', ['ui.router', 'ngResource', 'lbServices', 'ui-notification']);
 app
-.config(['$stateProvider', '$urlRouterProvider', function($stateProvider, $urlRouterProvider) {
+.config(['$stateProvider', '$urlRouterProvider', 'NotificationProvider', function($stateProvider, $urlRouterProvider, NotificationProvider) {
 	$urlRouterProvider.
 		otherwise("/hello");
 	$stateProvider
@@ -37,6 +37,16 @@ app
 			controller: "SettingsUserCtrl",
 			auth: true
 		});
+
+		NotificationProvider.setOptions({
+        delay: 5000,
+        startTop: 20,
+        startRight: 10,
+        verticalSpacing: 20,
+        horizontalSpacing: 20,
+        positionX: 'right',
+        positionY: 'top'
+    });
 }])
 .run(['$rootScope', '$state', 'Author', 'socialsService', function($rootScope, $state, User, socialsService) {
 	
@@ -101,7 +111,7 @@ app
     }
   });
 }])
-.factory('socialsService', ['$q', '$rootScope', 'Author', function($q, $rootScope, User) {
+.factory('socialsService', ['$q', '$rootScope', 'Author', 'Notification', function($q, $rootScope, User, Notification) {
 	var priv, pub, socials;
 	priv = {
 		credentials: {},
@@ -129,12 +139,12 @@ app
 		  			priv.remember(provider, data.connected);
 		  			defer.resolve(data);
 		  		}, function(err) {
-		  			alert('Ошибка записи данных');
+		  			Notification.error('Ошибка записи данных');
 						console.error('Error insert tokens: ', error);
 		  			defer.reject(err);
 		  		});
 				} else {
-		  		alert('Ошибка подключения '+provider);
+		  		Notification.error('Ошибка подключения '+provider);
 					console.error(provider+' not connected: ', error);
 					defer.reject(error);
 				}
@@ -166,7 +176,7 @@ app
 					$rootScope.currentUser.socials[provider] = false;
 					defer.resolve();
 				} else {
-					alert("Ошибка отключения " + err.config.data.provider + err);
+					Notification.error("Ошибка отключения " + err.config.data.provider + err);
 					console.log("Ошибка отключения " + err.config.data.provider, err);
 					defer.reject(err);
 				}

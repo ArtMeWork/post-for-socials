@@ -31,7 +31,7 @@ app
 				$scope.posts.push(data);
 				if(data.socials.length)
 					for(var provider in data.send_socials)
-						if(!data.send_socials) alert("Ошибка отправки в "+provider);
+						if(!data.send_socials) Notification.error("Ошибка отправки в "+provider);
 			});
 		}
 	};

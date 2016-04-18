@@ -1,5 +1,5 @@
 app
-.controller('RegAuthCtrl', ['$scope', 'Author', '$state', function($scope, User, $state) {
+.controller('RegAuthCtrl', ['$scope', 'Author', '$state', 'Notification', function($scope, User, $state, Notification) {
 	$scope.reg = {
 		login: null,
 		email: null,
@@ -11,9 +11,10 @@ app
 				email: this.email,
 				password: this.password
 			}, function(){
+				Notification.success('Вы успешно зарегистрировались!');
 				$state.go('login');
 			}, function(err){
-				alert('При регистрации произошла ошибка (подробности в консоли)');
+				Notification.error('При регистрации произошла ошибка:'+err.data.error.message);
 				console.log("При регистрации произошла ошибка: "+err.data.error.message);
 			})
 		}
@@ -47,7 +48,7 @@ app
 				}, function(err) {
 					loginForm.sendBtn.disabled = false;
 					enter = false;
-					alert('Login is failed');
+					Notification.error('Проверьте правильность введённых данных и повторите попытку.');
 				});
 			}
 		}

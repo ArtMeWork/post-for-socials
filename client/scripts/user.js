@@ -1,5 +1,5 @@
 app
-.controller('SettingsUserCtrl', ['$scope', 'Author', '$rootScope', 'socialsService', function($scope, User, $rootScope, socialsService) {
+.controller('SettingsUserCtrl', ['$scope', 'Author', '$rootScope', 'socialsService', 'Notification', function($scope, User, $rootScope, socialsService, Notification) {
 
   $scope.connect = function(provider) {
   	socialsService.connect(provider);
@@ -33,10 +33,14 @@ app
 				$rootScope.currentUser.userName = data.username;
 				$rootScope.currentUser.showName = data.username || data.email;
 				$scope.settings = angular.copy(defaultSettings);
-				alert('Ваши найстройки успешно изменены!');
+				Notification.success('Ваши найстройки успешно изменены!');
 			}, function(err) {
-				console.log(err);
-				alert('Ошибка при изменении настроек.\nСм. консоль.');
+				if(err.usernameExist)
+					Notification.error('Это имя уже занято. Введите другое.');
+				else {
+					console.log(err);
+					Notification.error('Ошибка при изменении настроек, проверьте вводимые данные.');
+				}
 			});
 		}
 	}
