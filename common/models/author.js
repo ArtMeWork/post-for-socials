@@ -79,15 +79,14 @@ module.exports = function(Author) {
             });
           } else pub.connected[id][provider] = false;
           if(!params) cb(null, false); {
+            if(!priv.api.users[id]) priv.api.users[id] = {};
             priv.api.users[id][provider] = new priv.api[provider];
             priv.api.users[id][provider].connect(params, function(err, res) {
               if(!err) {
                 pub.connected[id][provider] = res;
                 if(params.notupdate) cb(null, res); else {
-                  var query = {};
-                  query[provider] = params;
-                  Author.update({id:id}, query, function(err) {
-                    err ? cb(err) : cb(null, res);
+                  Author.update({id:id}, params, function(user_err) {
+                    err ? cb(user_err) : cb(null, res);
                   });
                 }
               } else cb(err);
