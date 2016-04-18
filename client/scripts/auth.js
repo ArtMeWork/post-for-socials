@@ -14,13 +14,17 @@ app
 				Notification.success('Вы успешно зарегистрировались!');
 				$state.go('login');
 			}, function(err){
-				Notification.error('При регистрации произошла ошибка:'+err.data.error.message);
-				console.log("При регистрации произошла ошибка: "+err.data.error.message);
+				if(err.data && err.data.error && err.data.error.message) {
+					Notification.error('При регистрации произошла ошибка:'+err.data.error.message);
+					console.log("При регистрации произошла ошибка: "+err.data.error.message);
+				} else {
+					Notification.error('При регистрации произошла.');
+				}
 			})
 		}
 	};
 }])
-.controller('LoginAuthCtrl', ['$rootScope', '$scope', 'Author', '$state', 'socialsService', function($rootScope, $scope, User, $state, socialsService) {
+.controller('LoginAuthCtrl', ['$rootScope', '$scope', 'Author', '$state', 'socialsService', 'Notification', function($rootScope, $scope, User, $state, socialsService, Notification) {
 	var enter = false;
 	$scope.login = {
 		login: "meridos@mail.ru",

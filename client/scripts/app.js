@@ -39,13 +39,13 @@ app
 		});
 
 		NotificationProvider.setOptions({
-        delay: 5000,
-        startTop: 20,
-        startRight: 10,
-        verticalSpacing: 20,
-        horizontalSpacing: 20,
-        positionX: 'right',
-        positionY: 'top'
+      delay: 5000,
+      startTop: 20,
+      startRight: 10,
+      verticalSpacing: 20,
+      horizontalSpacing: 20,
+      positionX: 'right',
+      positionY: 'top'
     });
 }])
 .run(['$rootScope', '$state', 'Author', 'socialsService', function($rootScope, $state, User, socialsService) {
@@ -219,4 +219,12 @@ app
 	};
 
 	return pub;
-}]);
+}])
+.directive('title', function() {
+	return function(scope, e) {
+		e.tooltip({container: 'body'});
+		scope.$on('$destroy', function() {
+			e.tooltip('destroy');
+		});
+	}
+});

@@ -14,8 +14,18 @@ module.exports = function(grunt) {
 		connect: {
 			server: {
 				options: {
-					port: '10000',
+					port: '4000',
 					base: 'client'
+				}
+			}
+		},
+		less: {
+			development: {
+				options: {
+					paths: ['client/libs/bootstrap/less']
+				},
+				files: {
+					'client/styles/main.css': 'client/styles/main.less'
 				}
 			}
 		},
@@ -26,6 +36,10 @@ module.exports = function(grunt) {
 			html: {
 				files: 'client/**/*.html'
 			},
+			styles: {
+				files: ['client/styles/**/*.less'],
+				tasks: ['less']
+			},
 			scripts: {
 				files: ['client/scripts/**/*.js']
 			},
@@ -33,7 +47,7 @@ module.exports = function(grunt) {
 				files: ['client/**/*.html','client/**/*.js','client/**/*.css'],
 				options: {
 					livereload: true
-				},
+				}
 			}
 		}
 	});
@@ -41,8 +55,9 @@ module.exports = function(grunt) {
 	grunt.loadNpmTasks('grunt-loopback-sdk-angular');
 	grunt.loadNpmTasks('grunt-contrib-connect');
 	grunt.loadNpmTasks('grunt-contrib-watch');
+	grunt.loadNpmTasks('grunt-contrib-less');
 
 	grunt.registerTask('build', ['loopback_sdk_angular']);
 	grunt.registerTask('default', ['connect', 'watch']);
-
+	grunt.registerTask('style', ['less', 'watch']);
 };
