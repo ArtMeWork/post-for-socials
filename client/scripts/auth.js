@@ -30,7 +30,8 @@ app
 		login: "meridos@mail.ru",
 		password: "admintema",
 		send: function () {
-			var _name=_email=null;
+			var _name=null,
+					_email=null;
 			this.login.indexOf("@")===-1 ? _name = this.login : _email = this.login;
 			if(!enter) {
 				enter = true;

@@ -1,6 +1,3 @@
-@import "bootstrap";
-@import "vars";
-
 input, button, a, textarea, select {
 	outline: none !important;
 }
@@ -66,7 +63,7 @@ form:not([novalidate]) .ng-dirty {
 		display: inline-block;
 		border-radius: 5px;
 		cursor: pointer;
-		background: url('../images/sprite-socials.png') no-repeat 0 0;
+		background: url('@{images-path}sprite-socials.png') no-repeat 0 0;
 		background-origin: border-box;
 		position: relative;
 		&.facebook {
@@ -112,7 +109,7 @@ form:not([novalidate]) .ng-dirty {
 	width: 20px;
 	height: 20px;
 	border-radius: 3px;
-	background: url('../images/sprite-socials.png') no-repeat 0 0;
+	background: url('@{images-path}sprite-socials.png') no-repeat 0 0;
 	background-size: cover;
 	margin-right: 5px;
 	&.facebook {

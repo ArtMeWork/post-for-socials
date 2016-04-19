@@ -4,7 +4,15 @@
 	<meta charset="UTF-8">
 	<title>Post for all social networks.</title>
 	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
-	<link rel="stylesheet" href="build/css/style.min.css"/>
+	<!-- build:css:production build/css/style.min.css -->
+	<!-- /build -->
+	<!-- build:css:ghPages css/style.min.css -->
+	<!-- /build -->
+	<!-- build:remove:production,ghPages -->
+	<link rel="stylesheet" href="libs/bootstrap/dist/css/bootstrap.min.css">
+	<link rel="stylesheet" href="libs/angular-ui-notification/dist/angular-ui-notification.min.css">
+	<link rel="stylesheet" href="styles/main.css">
+	<!-- /build -->
 </head>
 <body ng-app="postApp">
 	<nav class="navbar navbar-inverse navbar-fixed-top visible-xs">
@@ -53,8 +61,30 @@
 		</div>
 	</div>
 
-	<script src="build/js/app.min.js"></script>
+	<!-- build:js:production build/js/app.min.js -->
+	<!-- /build -->
 
+	<!-- build:js:ghPages js/app.min.js -->
+	<!-- /build -->
 
+	<!-- build:remove:production,ghPages -->
+	<!-- libs -->
+	<script src="libs/jquery/dist/jquery.min.js"></script>
+	<script src="libs/angular/angular.min.js"></script>
+	<script src="libs/bootstrap/dist/js/bootstrap.min.js"></script>
+	<script src="libs/angular-ui-router/release/angular-ui-router.min.js"></script>
+	<script src="libs/angular-resource/angular-resource.min.js"></script>
+	<script src="libs/oauth-js/dist/oauth.min.js"></script>
+	<script src="libs/angular-ui-notification/dist/angular-ui-notification.min.js"></script>
+	<!-- end libs -->
+
+	<!-- angular controllers, services -->
+	<script src="scripts/app.js"></script>
+	<script src="scripts/post.js"></script>
+	<script src="scripts/auth.js"></script>
+	<script src="scripts/user.js"></script>
+	<script src="scripts/services/lb-services.js"></script>
+	<!-- end angular controllers, services -->
+	<!-- /build -->
 </body>
 </html>

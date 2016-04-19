@@ -1,4 +1,4 @@
-'use strict';
+"use strict";
 
 var app = angular.module('postApp', ['ui.router', 'ngResource', 'lbServices', 'ui-notification']);
 app
@@ -57,17 +57,17 @@ app
 				return {
 					access_token_key: result.oauth_token,
 					access_token_secret: result.oauth_token_secret
-				}
+				};
 			},
 			facebook: function(result) {
 				return {
 					access_token: result.access_token
-				}
+				};
 			},
 			vk: function(result) {
 				return {
 					access_token: result.access_token
-				}
+				};
 			}
 		}
 	});
@@ -96,7 +96,7 @@ app
 		},
 		function(err) {
 			if(err.data.error.code==="AUTHORIZATION_REQUIRED") {
-				localStorage.setItem('$LoopBack$accessTokenId',''),
+				localStorage.setItem('$LoopBack$accessTokenId','');
 				localStorage.setItem('$LoopBack$currentUserId','');
 				$rootScope.currentUser = null;
 				$state.go('login');
@@ -116,10 +116,10 @@ app
 	priv = {
 		credentials: {},
 		remember: function(provider, user) {
-			provider && typeof user === "object" ?
-				$rootScope.currentUser.socials[provider] = user :
-				!provider && typeof user === "object" ?
-					$rootScope.currentUser.socials.connected = user : false;
+			if(provider && typeof user === "object")
+				$rootScope.currentUser.socials[provider] = user; else
+				if(!provider && typeof user === "object")
+					$rootScope.currentUser.socials.connected = user;
 		}
 	};
 	pub = {
@@ -226,5 +226,5 @@ app
 		scope.$on('$destroy', function() {
 			e.tooltip('destroy');
 		});
-	}
+	};
 });
