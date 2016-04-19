@@ -37,8 +37,9 @@ module.exports = grunt => {
 			},
 			ghPages: {
 				files: [
-					{expand: true, cwd: 'client/views', src: '**', dest: 'client/build/views/'},
-					{expand: true, cwd: 'client', src: 'README.md', dest: 'client/build/'}
+					{expand: true, cwd: 'client/build', src: '**', dest: 'client/ghpages/'},
+					{expand: true, cwd: 'client/views', src: '**', dest: 'client/ghpages/views/'},
+					{expand: true, cwd: 'client', src: 'README.md', dest: 'client/ghpages/'}
 				]
 			}
 		},
@@ -111,7 +112,7 @@ module.exports = grunt => {
 			},
 			ghPages: {
 				files: {
-					'client/build/index.html': ['client/views/index.html']
+					'client/ghpages/index.html': ['client/views/index.html']
 				}
 			}
 		},
@@ -151,6 +152,6 @@ module.exports = grunt => {
 	grunt.loadNpmTasks('grunt-processhtml');
 
 	grunt.registerTask('build', ['less:production', 'cssmin:production', 'copy:production', 'loopback_sdk_angular:production', 'uglify:production', 'processhtml:production']);
-	grunt.registerTask('ghPages', ['build', 'processhtml:ghPages', 'copy:ghPages']);
+	grunt.registerTask('ghPages', ['copy:ghPages', 'processhtml:ghPages']);
 	grunt.registerTask('default', ['connect', 'watch']);
 };
