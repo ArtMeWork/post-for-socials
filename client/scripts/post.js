@@ -1,5 +1,5 @@
 app
-.controller('MyPostCtrl', ['$scope', '$rootScope', 'Author', function ($scope, $rootScope, User) {
+.controller('MyPostCtrl', ['$scope', '$rootScope', 'Author', 'socialsService', 'Notification', function ($scope, $rootScope, User, socialsService, Notification) {
 	
 	$scope.posts = null;
 
@@ -29,9 +29,11 @@ app
 				$scope.newPost.text = null;
 				$scope.newPost.socials = [];
 				$scope.posts.push(data);
-				if(data.socials.length)
+				if(data.send_socials)
 					for(var provider in data.send_socials)
-						if(!data.send_socials) Notification.error("Ошибка отправки в "+provider);
+						if(!data.send_socials[provider] || data.send_socials[provider].error) {
+							Notification.error("Ошибка отправки в \""+socialsService.alias[provider].ru+"\"");
+						}
 			});
 		}
 	};

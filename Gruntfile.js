@@ -28,6 +28,10 @@ module.exports = grunt => {
 				}
 			}
 		},
+		clean: {
+			build: ['client/build'],
+			ghPages: ['client/ghpages']
+		},
 		copy: {
 			production: {
 				files: [
@@ -147,11 +151,13 @@ module.exports = grunt => {
 	grunt.loadNpmTasks('grunt-contrib-watch');
 	grunt.loadNpmTasks('grunt-contrib-less');
 	grunt.loadNpmTasks('grunt-contrib-cssmin');
+	grunt.loadNpmTasks('grunt-contrib-clean');
 	grunt.loadNpmTasks('grunt-contrib-copy');
 	grunt.loadNpmTasks('grunt-contrib-uglify');
 	grunt.loadNpmTasks('grunt-processhtml');
 
-	grunt.registerTask('build', ['less:production', 'cssmin:production', 'copy:production', 'loopback_sdk_angular:production', 'uglify:production', 'processhtml:production']);
+	grunt.registerTask('build', ['clean:build', 'less:production', 'cssmin:production', 'copy:production', 'loopback_sdk_angular:production', 'uglify:production', 'processhtml:production']);
+	grunt.registerTask('dev', ['less:development', 'processhtml:development','loopback_sdk_angular:development']);
 	grunt.registerTask('ghPages', ['copy:ghPages', 'processhtml:ghPages']);
 	grunt.registerTask('default', ['connect', 'watch']);
 };

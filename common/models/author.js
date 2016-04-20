@@ -263,25 +263,31 @@ module.exports = function(Author) {
     });
   });
 
-  Author.afterRemote('**.__create__posts', function(context, res, next) {
-    if(res && res.socials.length) {
+  Author.beforeRemote('**.__create__posts', function(context, instance, next) {
+    var data = context.args.data;
+    if(data.socials && data.socials.length) {
       var _providers = {};
-      res.socials.forEach(function(_provider) {
+      data.socials.forEach(function(_provider) {
         _providers[_provider] = async.apply(function(cb) {
           if(socials.enabled(_provider)) {
-            socials.api(res.authorId, _provider).send(res.text, function(err, _res) {
+            socials.api(context.instance.id, _provider).send(data.text, function(err, _res) {
               cb(null, {error: err, success: _res});
             });
           } else cb(null, "PROVIDER_NOT_FOUND");
         });
       });
       async.parallel(_providers, function(err, _res) {
-        res.send_socials = _res;
+        context.args.send_socials = _res;
         for(var key in _res)
-          if(_res[key].error) res.socials.splice(res.socials.indexOf(key),1);
+          if(_res[key].error) data.socials.splice(data.socials.indexOf(key),1);
         next();
       });
     } else next();
+  });
+
+  Author.afterRemote('**.__create__posts', function(context, res, next) {
+    res.send_socials = context.args.send_socials;
+    next();
   });
 
   Author.beforeRemote('logout', function(context, res, next) {

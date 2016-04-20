@@ -69,6 +69,23 @@ app
 					access_token: result.access_token
 				};
 			}
+		},
+		alias: {
+			vk: {
+				en: 'vkontakte',
+				ru: 'вконтакте',
+				site: 'vk.com'
+			},
+			facebook: {
+				en: 'facebook',
+				ru: 'фейсбук',
+				site: 'facebook.com'
+			},
+			twitter: {
+				en: 'twitter',
+				ru: 'твиттер',
+				site: 'twitter.com'
+			}
 		}
 	});
 
@@ -95,11 +112,13 @@ app
 			socialsService.isConnected();
 		},
 		function(err) {
-			if(err.data.error.code==="AUTHORIZATION_REQUIRED") {
-				localStorage.setItem('$LoopBack$accessTokenId','');
-				localStorage.setItem('$LoopBack$currentUserId','');
-				$rootScope.currentUser = null;
-				$state.go('login');
+			if(err.data && err.data.error) {
+				if(err.data.error.code==="AUTHORIZATION_REQUIRED") {
+					localStorage.setItem('$LoopBack$accessTokenId','');
+					localStorage.setItem('$LoopBack$currentUserId','');
+					$rootScope.currentUser = null;
+					$state.go('login');
+				}
 			}
 		});
 	}
@@ -215,6 +234,9 @@ app
 				}
 			});
 			return socials;
+		},
+		get alias() {
+			return angular.copy(priv.credentials.alias);
 		}
 	};
 
