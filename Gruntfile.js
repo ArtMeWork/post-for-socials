@@ -48,6 +48,11 @@ module.exports = grunt => {
 			}
 		},
 		less: {
+			new: {
+				files: {
+					'client/styles/new.css': 'client/styles/new.less'
+				}
+			},
 			development: {
 				options: {
 					modifyVars: {
@@ -131,8 +136,8 @@ module.exports = grunt => {
 				files: 'client/**/*.html'
 			},
 			less: {
-				files: ['client/styles/**/*.less'],
-				tasks: ['less:development']
+				files: ['client/styles/new.less'],
+				tasks: ['less:new']
 			},
 			scripts: {
 				files: ['client/scripts/**/*.js']

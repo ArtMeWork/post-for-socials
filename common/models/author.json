@@ -32,8 +32,8 @@
       "foreignKey": "authorId"
     },
     "AccessTokens": {
-      "model": "AccessToken",
       "type": "hasMany",
+      "model": "AccessToken",
       "foreignKey": "authorId"
     }
   },

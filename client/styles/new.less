@@ -1,0 +1,249 @@
+// @import "../libs/bootstrap/less/variables.less";
+// @import "../libs/bootstrap/less/glyphicons.less";
+@import "../libs/bootstrap/less/bootstrap.less";
+@import "socials.less";
+
+@icon-font-path: "../fonts/";
+@font-family-sans-serif: "Noto Sans", "Helvetica Neue", Helvetica, Arial, sans-serif;
+@post-border-color: #E5E6EC;
+@twitter-color: #55ACEE;
+@facebook-color: #4862A3;
+@vkontakte-color: #5C82AB;
+
+/*@btn-font-weight:                normal;
+
+@btn-default-color:              #ddd;
+@btn-default-bg:                 #fff;
+@btn-default-border:             #ccc;
+
+@btn-primary-color:              #fff;
+// @btn-primary-bg:                 @brand-primary;
+// @btn-primary-border:             darken(@btn-primary-bg, 5%);
+
+@btn-success-color:              #fff;
+// @btn-success-bg:                 @brand-success;
+// @btn-success-border:             darken(@btn-success-bg, 5%);
+
+@btn-info-color:                 #fff;
+// @btn-info-bg:                    @brand-info;
+// @btn-info-border:                darken(@btn-info-bg, 5%);
+
+@btn-warning-color:              #fff;
+// @btn-warning-bg:                 @brand-warning;
+// @btn-warning-border:             darken(@btn-warning-bg, 5%);
+
+@btn-danger-color:               #fff;
+// @btn-danger-bg:                  @brand-danger;
+// @btn-danger-border:              darken(@btn-danger-bg, 5%);
+
+// @btn-link-disabled-color:        @gray-light;
+
+// Allows for customizing button radius independently from global border radius
+// @btn-border-radius-base:         @border-radius-base;
+// @btn-border-radius-large:        @border-radius-large;
+// @btn-border-radius-small:        @border-radius-small;
+ */
+
+body {
+	font-family: @font-family-sans-serif;
+	background: #F1F2F4;
+}
+#layout {
+	position: relative;
+	max-width: 900px;
+	width: 100%;
+	height: 100%;
+	margin: 0 auto;
+	aside {
+		* {
+			color: #fff;
+		}
+		.title {
+			font-size: 20px;
+			letter-spacing: 2px;
+			font-weight: bold;
+			span:nth-child(1) {
+				color: @twitter-color;
+			}
+			span:nth-child(2) {
+				color: @vkontakte-color;
+			}
+			span:nth-child(3) {
+				color: @facebook-color;
+			}
+		}
+		.center-side {
+			position: absolute;
+			top: 286px;
+			bottom: 43px;
+			width: 100%;
+			&>.center-side-inner {
+				width: 100%;
+				height: 0;
+				position: absolute;
+				top: 50%;
+				.new-post-btn {
+					margin-top: -35.5px;
+					text-align: center;
+					height: 71px;
+					span {
+						display: block;
+						font-size: 20px;
+						margin-bottom: 10px;
+					}
+				}
+			}
+		}
+		.down-side {
+			position: absolute;
+			width: 100%;
+			bottom: 0;
+		}
+		.profile-info {
+			text-align: center;
+			padding: 10px 5px;
+			margin-bottom: 10px;
+			.avatar {
+				max-width: 100px;
+				width: 100%;
+				border-radius: 50%;
+				border: 2px solid #fff;
+				margin-bottom: 10px;
+			}
+			.show-name {
+				word-wrap: break-word;
+			}
+		}
+		nav, .nav {
+			a {
+				display: block;
+				padding: 10px 5px;
+				text-align: center;
+				&:hover, &:focus, &:active {
+					text-decoration: none;
+				}
+				&:hover {
+					background: #191919;
+				}
+				&.active {
+					background: #111;
+				}
+			}
+			&.main-menu a {
+				position: relative;
+				span.glyphicon {
+					position: absolute;
+					left: 15px;
+					line-height: 41px;
+				}
+			}
+		}
+	}
+	section#wrapper {
+		position: relative;
+		margin: 10px 10px 10px 210px;
+		z-index: 10;
+		article {
+			position: relative;
+			background: #fff;
+			padding: 10px;
+			border: 1px solid @post-border-color;
+			box-shadow: 2px 2px 8px rgba(0,0,0,0.05);
+			margin-bottom: 10px;
+			min-width: 150px;
+			border-radius: 3px;
+			&:hover .delete {
+				opacity: 1;
+			}
+			.info {
+				margin-top: 5px;
+				padding-top: 10px;
+				border-top: 1px solid @post-border-color;
+				.date {
+					.glyphicon;
+					.glyphicon-time;
+					font-size: 13px;
+					color: #C5C5C5;
+					&:before {
+						vertical-align: middle;
+					}
+					span {
+						vertical-align: middle;
+				    height: 25px;
+				    line-height: 22px;
+				    display: inline-block;
+				    margin-left: 5px;
+					}
+				}
+				.socials {
+					font-size: 18px;
+					display: inline-block;
+					line-height: 1;
+					height: 25px;
+					color: #DCDCDC;
+					span {
+						vertical-align: middle;
+						margin-left: 5px;
+						transition: color .2s;
+						&.icon-vkontakte:hover {
+							color: @vkontakte-color;
+						}
+						&.icon-facebook:hover {
+							color: @facebook-color;
+						}
+						&.icon-twitter:hover {
+							color: @twitter-color;
+						}
+					}
+				}
+			}
+			&>.delete {
+				.glyphicon;
+				.glyphicon-remove;
+				opacity: 0;
+				position: absolute;
+				top: -1px;
+				right: -1px;
+				width: 30px;
+				height: 30px;
+				border: 1px solid @post-border-color;
+				border-radius: 0 0 0 3px;
+				background: #fff;
+				text-align: center;
+				line-height: 28px;
+				color: #DCDCDC;
+				text-decoration: none;
+				transition: opacity .2s;
+				&:before {
+					transition: color .2s;
+				}
+				&:hover:before {
+					color: #DA0A0A;
+				}
+			}
+		}
+	}
+}
+
+@media (min-width: 500px) {
+	#layout aside {
+		display: block;
+		position: fixed;
+		top: 0;
+		width: 200px;
+		height: 100%;
+		background: #1E1E23;
+		overflow-y: auto;
+		z-index: 50;
+		font-size: 15px;
+		text-shadow: 0 -1px 0px #000;
+	}
+}
+
+@media (max-width: 499px) {
+	#layout aside {
+		.main {
+			display: none;
+		}
+	}
+}
