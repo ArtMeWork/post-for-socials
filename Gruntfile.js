@@ -14,7 +14,7 @@ module.exports = grunt => {
 	    },
 	    production: {
 	    	options: {
-	      	apiUrl: 'https://post-for-socials.herokuapp.com/api',
+	      	apiUrl: 'https://socpost.herokuapp.com/api',
 	    		input: 'server/server.js',
 	    		output: 'client/scripts/services/lb-services.js'
 	    	}
@@ -48,11 +48,6 @@ module.exports = grunt => {
 			}
 		},
 		less: {
-			new: {
-				files: {
-					'client/styles/new.css': 'client/styles/new.less'
-				}
-			},
 			development: {
 				options: {
 					modifyVars: {
@@ -136,8 +131,8 @@ module.exports = grunt => {
 				files: 'client/**/*.html'
 			},
 			less: {
-				files: ['client/styles/new.less'],
-				tasks: ['less:new']
+				files: ['client/styles/main.less'],
+				tasks: ['less:development']
 			},
 			scripts: {
 				files: ['client/scripts/**/*.js']

@@ -9,15 +9,22 @@
 	<link rel="stylesheet" href="styles/new.css">
 	<script src="libs/jquery/dist/jquery.min.js"></script>
 	<script src="libs/bootstrap/dist/js/bootstrap.min.js"></script>
+	<script>
+	$(document).ready(function() {
+		$('#collapse-menu').click(function() {
+			$('body').toggleClass('menu-showed');
+		});
+	});
+	</script>
 </head>
 <body>
 	<div id="layout">
 		<aside>
-			<div class="nav title"><a href="#"><span>S</span><span>o</span><span>c</span>Post</a></div>
-			<div class="main">
+			<div class="nav title"><a href="#" id="collapse-menu" class="collapse-btn"></a><a href="#"><span>S</span><span>o</span><span>c</span>Post</a><a href="#" class="new-post-btn"></a></div>
+			<div class="main" id="main">
 				<div class="top-side">
 					<div class="profile-info">
-						<div><img src="https://pbs.twimg.com/profile_images/1250585862/sd.jpg" alt="Show Name" class="avatar"></div>
+						<div><img src="images/tema.jpg" alt="Show Name" class="avatar"></div>
 						<div class="show-name">meridos</div>
 					</div>
 					<nav class="main-menu">
@@ -41,35 +48,41 @@
 			</div>
 		</aside>
 		<section id="wrapper">
-			<article class="one">
+			<article>
+				<h3 class="line">Социальные сети:</h3>
+				<a href="#" class="btn btn-default socials"><span class="icon-twitter active"></span> <span class="text">ArtMeWork</span><span class="delete">Отключить</span></a><button class="btn btn-default"><span class="icon-twitter"></span></button><a href="#" class="btn btn-default glyphicon glyphicon-remove"></a>
+				<h4>Социальные сети:</h4>
+				hello
+			</article>
+			<article>
 				<div class="text">Решил я тут недавно на одном из своих сайтов сделать легкий редизайн. И дошло дело до фона. Показался он мне каким-то скучным. Захотелось его немного</div>
 				<div class="info clearfix">
 					<div class="date pull-left"><span>11.08.2016 22:11</span></div>
-					<div class="socials pull-right" title="Отправлено в:"><span class="icon-vkontakte"></span><span class="icon-facebook"></span><span class="icon-twitter"></span></div>
+					<div class="socials pull-right" title="Отправлено в:"><span class="icon-vk"></span><span class="icon-facebook"></span><span class="icon-twitter"></span></div>
 				</div>
 				<a class="delete" href="#"></a>
 			</article>
-		<article class="one">
+		<article>
 				<div class="text">Решил я тут недавно на одном из своих сайтов сделать легкий редизайн. И дошло дело до фона. Показался он мне каким-то скучным. Захотелось его немного</div>
 				<div class="info clearfix">
 					<div class="date pull-left"><span>11.08.2016 22:11</span></div>
-					<div class="socials pull-right" title="Отправлено в:"><span class="icon-vkontakte"></span><span class="icon-facebook"></span><span class="icon-twitter"></span></div>
+					<div class="socials pull-right" title="Отправлено в:"><span class="icon-vk"></span><span class="icon-facebook"></span><span class="icon-twitter"></span></div>
 				</div>
 				<a class="delete" href="#"></a>
 			</article>
-		<article class="one">
+		<article>
 				<div class="text">Решил я тут недавно на одном из своих сайтов сделать легкий редизайн. И дошло дело до фона. Показался он мне каким-то скучным. Захотелось его немного</div>
 				<div class="info clearfix">
 					<div class="date pull-left"><span>11.08.2016 22:11</span></div>
-					<div class="socials pull-right" title="Отправлено в:"><span class="icon-vkontakte"></span><span class="icon-facebook"></span><span class="icon-twitter"></span></div>
+					<div class="socials pull-right" title="Отправлено в:"><span class="icon-vk"></span><span class="icon-facebook"></span><span class="icon-twitter"></span></div>
 				</div>
 				<a class="delete" href="#"></a>
 			</article>
-		<article class="one">
+		<article>
 				<div class="text">Решил я тут недавно на одном из своих сайтов сделать легкий редизайн. И дошло дело до фона. Показался он мне каким-то скучным. Захотелось его немного</div>
 				<div class="info clearfix">
 					<div class="date pull-left"><span>11.08.2016 22:11</span></div>
-					<div class="socials pull-right" title="Отправлено в:"><span class="icon-vkontakte"></span><span class="icon-facebook"></span><span class="icon-twitter"></span></div>
+					<div class="socials pull-right" title="Отправлено в:"><span class="icon-vk"></span><span class="icon-facebook"></span><span class="icon-twitter"></span></div>
 				</div>
 				<a class="delete" href="#"></a>
 			</article>

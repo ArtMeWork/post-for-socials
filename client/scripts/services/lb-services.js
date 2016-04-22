@@ -11,7 +11,7 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' && module.ex
 
 (function(window, angular, undefined) {'use strict';
 
-var urlBase = "https://post-for-socials.herokuapp.com/api";
+var urlBase = "https://socpost.herokuapp.com/api";
 var authHeader = 'authorization';
 
 function getHost(url) {
