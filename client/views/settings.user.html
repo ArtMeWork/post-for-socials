@@ -1,43 +1,45 @@
-<div class="panel panel-primary">
-	<div class="panel-heading">Настройки профиля</div>
-	<div class="panel-body">
-		<div class="form-group ng-hide" ng-hide="currentUser.socials.connected===currentUser.socials.enabled">
-			<div>
-				<label>Добавить социальную сеть:</label>
-			</div>
-			<input type="button" class="btn btn-success ng-hide" ng-hide="currentUser.socials.twitter" ng-click="connect('twitter')" value="Connect Twitter">
-			<input type="button" class="btn btn-success ng-hide" ng-hide="currentUser.socials.facebook" ng-click="connect('facebook')" value="Connect Facebook">
-			<!-- <input type="button" class="btn btn-success ng-hide" ng-hide="currentUser.socials.vk" ng-click="connect('vk')" value="Connect Vkontakte"> -->
-		</div>
-		<div class="form-group ng-hide" ng-show="currentUser.socials.connected>0">
-			<div>
-				<label>Подключенные социальные сети:</label>
-			</div>
-			<blockquote class="ng-hide" ng-show="currentUser.socials.twitter">
-				<p><b>Twitter:</b> <span ng-bind="currentUser.socials.twitter.name"></span>  <a href="" class="pull-right" ng-click="disconnect('twitter')"><span class="glyphicon glyphicon-remove" aria-hidden="true"></span></a></p>				
-			</blockquote>
-			<blockquote class="ng-hide" ng-show="currentUser.socials.facebook">
-				<p><b>Facebook:</b> <span ng-bind="currentUser.socials.facebook.name"></span>  <a href="" class="pull-right" ng-click="disconnect('facebook')"><span class="glyphicon glyphicon-remove" aria-hidden="true"></span></a></p>				
-			</blockquote>
-		</div>
-		<form name="settingsForm" ng-submit="settingsForm.$valid && send()">
-			<div class="form-group">
-				<label>Имя пользователя</label>
-				<input type="text" ng-model="settings.username" name="username" class="form-control" placeholder="username123" username ng-model-options="{debounce: 500}">
-			</div>
-			<div class="form-group">
-				<label>Удалить имя пользователя: <input type="checkbox" ng-model="settings.deleteUsername"></label>
-			</div>
-			<div class="form-group">
-				<label>Смена пароля</label>
-				<input type="password" ng-model="settings.password" name="password" class="form-control" placeholder="Новый пароль">
-			</div>
-			<div class="form-group">
-				<input type="password" ng-model="settings.confirmPassword" name="confirmpassword" class="form-control" placeholder="Введите пароль еще раз" confirm-pass="settings.password">
-			</div>
-			<div class="form-group">
-				<input type="submit" class="btn btn-primary" ng-class="{disabled: settingsForm.$invalid}" value="Изменить">
-			</div>
-		</form>
+<article id="page_settings">
+	<h3 class="line">Социальные сети:</h3>
+
+	<div class="text-center">
+		<a href="" ng-click="disconnect(social.provider)" class="btn btn-default btn-social" title="Отключить" ng-repeat="social in currentUser.socials.connected"><span class="icon-{{::social.provider}} active"></span> <span class="text" ng-bind="::social.name"></span></a>
+		<h4 ng-show="currentUser.socials.not_connected.length">Не подключены:</h4>
+		<a href="" ng-click="connect(provider)" class="btn btn-default btn-social" ng-repeat="provider in currentUser.socials.not_connected"><span class="icon-{{::provider}}"></span> <span ng-bind="::alias[provider].ru"></span></a>
 	</div>
-</div>
+	
+	<h3 class="line">Данные профиля:</h3>
+	<form name="settingsForm" ng-submit="settingsForm.$valid && send()">
+		<div class="form-group">
+			<label>Имя пользователя</label>
+			<input type="text" ng-model="settings.username" name="username" class="form-control" placeholder="username123" username ng-model-options="{debounce: 500}">
+		</div>
+		<div class="form-group">
+			<input class="checkbox" type="checkbox" ng-model="settings.deleteUsername" id="settings_remove_nickname"><label for="settings_remove_nickname">Удалить имя пользователя</label>
+		</div>
+		<br>
+		<div class="form-group">
+			<label>Аватар:</label>
+			<input class="form-control" type="text" ng-model="settings.avatar_url" ng-change="updateAvatar('url')" placeholder="URL картинки">
+		</div>
+		<div class="form-group">
+			<label>Установить из социальной сети:</label>
+			<div ng-repeat="social in currentUser.socials.connected">
+				<input class="radio" type="radio" name="settings_avatar_socials" ng-model="settings.avatar_socials" ng-change="updateAvatar('socials')" ng-value="social.provider" id="settings_avatar{{$index}}"><label for="settings_avatar{{$index}}">{{alias[social.provider].ru}}</label>
+			</div>
+		</div>
+		<div class="form-group">
+			<input class="checkbox" type="checkbox" ng-model="settings.deleteAvatar" id="settings_remove_avatar" ng-change="updateAvatar('delete')"><label for="settings_remove_avatar">Удалить аватар</label>
+		</div>
+		<br>
+		<div class="form-group">
+			<label>Смена пароля</label>
+			<input type="password" ng-model="settings.password" name="password" class="form-control" placeholder="Новый пароль">
+		</div>
+		<div class="form-group">
+			<input type="password" ng-model="settings.confirmPassword" name="confirmpassword" class="form-control" placeholder="Введите пароль еще раз" confirm-pass="settings.password">
+		</div>
+		<div class="form-group text-center">
+			<input type="submit" class="btn btn-default" ng-class="{disabled: settingsForm.$invalid}" value="Сохранить">
+		</div>
+	</form>
+</article>

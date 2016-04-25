@@ -29,7 +29,8 @@ module.exports = function(Author) {
       this.sdk.get('account/verify_credentials', function(error, twit_data) {
         error ? cb(error) : cb(null, {
           id: twit_data.screen_name,
-          name: twit_data.name
+          name: twit_data.name,
+          avatar: twit_data.profile_image_url_https.replace("_normal", "")
         });
       });
     };
@@ -44,10 +45,10 @@ module.exports = function(Author) {
     priv.api.facebook.prototype.connect = function(params, cb) {
       this.access_token = params.access_token;
       facebook.setAccessToken(this.access_token);
-      facebook.api('me', function (res) {
+      facebook.api('me', {fields:['name','picture']}, function (res) {
         !res || res.error ?
           cb(!res ? 'error occurred' : res.error) :
-          cb(null, res);
+          cb(null, {id: res.id, name: res.name, avatar: res.picture.data.url});
       });
     };
     priv.api.facebook.prototype.send = function(text, cb) {
@@ -273,7 +274,7 @@ module.exports = function(Author) {
             socials.api(context.instance.id, _provider).send(data.text, function(err, _res) {
               cb(null, {error: err, success: _res});
             });
-          } else cb(null, "PROVIDER_NOT_FOUND");
+          } else cb(null, {error: "PROVIDER_NOT_FOUND", success: false});
         });
       });
       async.parallel(_providers, function(err, _res) {

@@ -5,14 +5,14 @@ module.exports = grunt => {
 		pkg: grunt.file.readJSON('package.json'),
 
 		loopback_sdk_angular: {
-	    development: {
+	    main: {
 	      options: {
-	      	apiUrl: 'http://localhost:5000/api',
+	      	apiUrl: '/api',
 	        input: 'server/server.js',
 	        output: 'client/scripts/services/lb-services.js'
 	      }
 	    },
-	    production: {
+	    ghPages: {
 	    	options: {
 	      	apiUrl: 'https://socpost.herokuapp.com/api',
 	    		input: 'server/server.js',
@@ -36,6 +36,7 @@ module.exports = grunt => {
 			production: {
 				files: [
 					{expand: true, cwd: 'client/libs/bootstrap/fonts', src: '**', dest: 'client/build/fonts/'},
+					{expand: true, cwd: 'client/fonts', src: '**', dest: 'client/build/fonts/'},
 					{expand: true, cwd: 'client/images', src: '**', dest: 'client/build/images/'}
 				]
 			},
@@ -48,10 +49,22 @@ module.exports = grunt => {
 			}
 		},
 		less: {
+			bootstrap: {
+				options: {
+					paths: ['client/libs/bootstrap/less/'],
+					modifyVars: {
+						'vars': '"development"'
+					}
+				},
+				files: {
+					'client/styles/bootstrap.css': 'client/styles/_bootstrap.less',
+				}
+			},
 			development: {
 				options: {
+					paths: ['client/libs/bootstrap/less/'],
 					modifyVars: {
-						'images-path': '"../images/"'
+						'vars': '"development"'
 					}
 				},
 				files: {
@@ -60,13 +73,13 @@ module.exports = grunt => {
 			},
 			production: {
 				options: {
+					paths: ['client/libs/bootstrap/less/'],
 					modifyVars: {
-						'icon-font-path': '"../fonts/"',
-						'images-path': '"../images/"'
+						'vars': '"production"'
 					}
 				},
 				files: {
-					'client/build/css/bootstrap.css': 'client/libs/bootstrap/less/bootstrap.less',
+					'client/build/css/bootstrap.css': 'client/styles/_bootstrap.less',
 					'client/build/css/main.css': 'client/styles/main.less'
 				}
 			}
@@ -131,8 +144,12 @@ module.exports = grunt => {
 				files: 'client/**/*.html'
 			},
 			less: {
-				files: ['client/styles/main.less'],
+				files: ['client/styles/*.less'],
 				tasks: ['less:development']
+			},
+			bootstrap: {
+				files: ['client/styles/_bootstrap.less', 'client/styles/_vars*.less'],
+				tasks: ['less:bootstrap']
 			},
 			scripts: {
 				files: ['client/scripts/**/*.js']
@@ -156,8 +173,8 @@ module.exports = grunt => {
 	grunt.loadNpmTasks('grunt-contrib-uglify');
 	grunt.loadNpmTasks('grunt-processhtml');
 
-	grunt.registerTask('build', ['clean:build', 'less:production', 'cssmin:production', 'copy:production', 'loopback_sdk_angular:production', 'uglify:production', 'processhtml:production']);
-	grunt.registerTask('dev', ['less:development', 'processhtml:development','loopback_sdk_angular:development']);
-	grunt.registerTask('ghPages', ['copy:ghPages', 'processhtml:ghPages']);
+	grunt.registerTask('build', ['clean:build', 'less:production', 'cssmin:production', 'copy:production', 'loopback_sdk_angular:main', 'uglify:production', 'processhtml:production']);
+	grunt.registerTask('dev', ['less:development', 'processhtml:development','loopback_sdk_angular:main']);
+	grunt.registerTask('ghPages', ['clean:build', 'less:production', 'cssmin:production', 'copy:production', 'loopback_sdk_angular:ghPages', 'uglify:production', 'processhtml:production', 'copy:ghPages', 'processhtml:ghPages']);
 	grunt.registerTask('default', ['connect', 'watch']);
 };

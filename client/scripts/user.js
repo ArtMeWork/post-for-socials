@@ -4,19 +4,34 @@ app
   $scope.connect = function(provider) {
   	socialsService.connect(provider);
   };
+
   $scope.disconnect = socialsService.disconnect;
 
-	var defaultSettings = angular.copy($scope.settings);
+  $scope.alias = socialsService.alias;
+
 	$scope.settings = {
 		username: "",
 		password: "",
 		confirmPassword: "",
-		deleteUsername: false
+		deleteUsername: false,
+		deleteAvatar: false,
+		avatar_socials: "",
+		avatar_url: ""
 	};
+	var defaultSettings = angular.copy($scope.settings);
+
+	$scope.updateAvatar = function(model) {
+		model === "url" ? $scope.settings.avatar_socials = $scope.settings.deleteAvatar = "" :
+			model === "delete" ? $scope.settings.avatar_socials = $scope.settings.avatar_url = "" :
+				$scope.settings.avatar_url = $scope.settings.deleteAvatar = "";
+	};
+
 	$scope.send = function() {
-		var _settings = {
+		var avatar = this.settings.avatar_url || this.settings.avatar_socials || null,
+		_settings = {
 			username: this.settings.username,
-			password: this.settings.password
+			password: this.settings.password,
+			avatar: avatar
 		},
 		_send = {},
 		_sendIsEmpty = true;
@@ -26,11 +41,17 @@ app
 				_sendIsEmpty = false;
 			}
 		}
-		if (this.settings.deleteUsername) {_send.username = ""; _sendIsEmpty=false;};
+		if (this.settings.deleteUsername) {_send.username = null; _sendIsEmpty=false;};
+		if (this.settings.deleteAvatar) {_send.avatar = null; _sendIsEmpty=false;};
 		if (!_sendIsEmpty) {
 			_send.id = $rootScope.currentUser.id;
-			User.prototype$updateAttributes(_send).$promise.then(function(data){
+			User.prototype$updateAttributes(_send).$promise.then(function(data) {
 				$rootScope.currentUser.userName = data.username;
+				try {
+					$rootScope.currentUser.avatar = data.avatar ? $rootScope.currentUser.socials[data.avatar].avatar : "#";
+				} catch (err) {
+					$rootScope.currentUser.avatar = data.avatar;
+				}
 				$rootScope.currentUser.showName = data.username || data.email;
 				$scope.settings = angular.copy(defaultSettings);
 				Notification.success('Ваши найстройки успешно изменены!');

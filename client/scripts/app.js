@@ -49,7 +49,6 @@ app
     });
 }])
 .run(['$rootScope', '$state', 'Author', 'socialsService', function($rootScope, $state, User, socialsService) {
-	
 	socialsService.setCredentials({
 		app_id: "Gu74r20E9GstEHuQU_qneaw7OVI",
 		socials: {
@@ -72,18 +71,18 @@ app
 		},
 		alias: {
 			vk: {
-				en: 'vkontakte',
-				ru: 'вконтакте',
+				en: 'Vkontakte',
+				ru: 'Вконтакте',
 				site: 'vk.com'
 			},
 			facebook: {
-				en: 'facebook',
-				ru: 'фейсбук',
+				en: 'Facebook',
+				ru: 'Фейсбук',
 				site: 'facebook.com'
 			},
 			twitter: {
-				en: 'twitter',
-				ru: 'твиттер',
+				en: 'Twitter',
+				ru: 'Твиттер',
 				site: 'twitter.com'
 			}
 		}
@@ -109,7 +108,13 @@ app
 				showName: data.username || data.email,
 				socials: socialsService.socials()
 			};
-			socialsService.isConnected();
+			socialsService.isConnected().finally(function() {
+				try {
+					$rootScope.currentUser.avatar = $rootScope.currentUser.socials[data.avatar].avatar;
+				} catch (err) {
+					$rootScope.currentUser.avatar = data.avatar;
+				}
+			});
 		},
 		function(err) {
 			if(err.data && err.data.error) {
@@ -124,6 +129,7 @@ app
 	}
 
 	$rootScope.$on('$stateChangeStart', function(event, next) {
+		angular.element('body').removeClass('menu-showed');
     if (next.auth && !$rootScope.currentUser) {
       event.preventDefault();
       $state.go('hello');
@@ -131,12 +137,14 @@ app
   });
 }])
 .factory('socialsService', ['$q', '$rootScope', 'Author', 'Notification', function($q, $rootScope, User, Notification) {
-	var priv, pub, socials;
+	var priv, pub;
 	priv = {
 		credentials: {},
 		remember: function(provider, user) {
-			if(provider && typeof user === "object")
-				$rootScope.currentUser.socials[provider] = user; else
+			if(provider) {
+				$rootScope.currentUser.socials[provider] = user;
+				$rootScope.currentUser.socials.connected = $rootScope.currentUser.socials;
+			} else
 				if(!provider && typeof user === "object")
 					$rootScope.currentUser.socials.connected = user;
 		}
@@ -158,12 +166,15 @@ app
 		  			priv.remember(provider, data.connected);
 		  			defer.resolve(data);
 		  		}, function(err) {
-		  			Notification.error('Ошибка записи данных');
+		  			if(err.data.error && err.data.error.message=="PROVIDER_NOT_FOUND")
+		  				Notification.error('Подключение к "'+pub.alias[provider].ru+'" сейчас не возможно.');
+		  			else 
+		  				Notification.error('Ошибка записи данных');
 						console.error('Error insert tokens: ', error);
 		  			defer.reject(err);
 		  		});
 				} else {
-		  		Notification.error('Ошибка подключения '+provider);
+		  		Notification.error('Ошибка подключения "'+pub.alias[provider].ru+'"');
 					console.error(provider+' not connected: ', error);
 					defer.reject(error);
 				}
@@ -188,11 +199,11 @@ app
 				id: $rootScope.currentUser.id,
 				provider: provider
 			}, function(res) {
-				$rootScope.currentUser.socials[provider] = false;
+				priv.remember(provider, false);
 				defer.resolve(res);
 			}, function(err) {
 				if(typeof err==="object" && err.data.error.message==="NOT_CONNECTED") {
-					$rootScope.currentUser.socials[provider] = false;
+					priv.remember(provider, false);
 					defer.resolve();
 				} else {
 					Notification.error("Ошибка отключения " + err.config.data.provider + err);
@@ -202,35 +213,46 @@ app
 			});
 			return defer.promise;
 		},
-		socials: function(enabled) {
-			var socials = {};
-			if(!enabled)
-				Object.keys(priv.credentials.socials).forEach(function(social) {
-					socials[social] = false;
-				});
-			else if(typeof enabled==="object")
-				for(var key in enabled)
-					socials[key] = enabled[key];
+		socials: function(soc) {
+			var socials = {}, connected = [], not_connected = [];
+			Object.keys(priv.credentials.socials).forEach(function(social) {
+				socials[social] = false;
+			});
 			Object.defineProperty(socials, 'enabled', {
 				enumerable: false,
 				configurable: false,
-				get: function() {
-					return Object.keys(socials).length;
+				get: function(provider) {
+					if (provider)
+						return socials[provider] ? true : false; else
+						return Object.keys(socials).length;
 				}
 			});
 			Object.defineProperty(socials, 'connected', {
 				enumerable: false,
 				configurable: false,
 				get: function() {
-					var count = 0;
-					for(var key in socials)
-						if(socials[key])
-							count++;
-					return count;
+					return connected;
 				},
 				set: function(newSocials) {
-					for(var key in newSocials)
+					connected = [];
+					not_connected = Object.keys($rootScope.currentUser.socials);
+					for(var key in newSocials) {
 						socials[key] = newSocials[key];
+						if(newSocials[key]) {
+							var _social = {};
+							_social = newSocials[key];
+							_social.provider = key;
+							connected.push(_social);
+							not_connected.splice(not_connected.indexOf(key), 1);
+						}
+					}
+				}
+			});
+			Object.defineProperty(socials, 'not_connected', {
+				enumerable: false,
+				configurable: false,
+				get: function() {
+					return not_connected;
 				}
 			});
 			return socials;
@@ -247,6 +269,100 @@ app
 		e.tooltip({container: 'body'});
 		scope.$on('$destroy', function() {
 			e.tooltip('destroy');
+			angular.element('.tooltip').remove();
 		});
 	};
-});
+})
+.factory('Posts', ['$rootScope', '$q', '$timeout', 'Author', 'Notification', 'socialsService', function($rootScope, $q, $timeout, User, Notification, socialsService) {
+	var priv = {
+		posts: [],
+		skip: 0,
+		limit: 10
+	};
+	function setConf(conf) {
+		for (var key in conf) {
+			priv[key] = conf[key];
+		}
+	}
+	function newPost(text, socials) {
+		var defer = $q.defer();
+		User.posts.create({id:$rootScope.currentUser.id}, {
+			text: text,
+			socials: socials
+		}, function(data) {
+			var err = false;
+			priv.posts.splice(0,0,data);
+			if(data.send_socials)
+				for(var provider in data.send_socials)
+					if(!data.send_socials[provider] || data.send_socials[provider].error) {
+						err = true;
+						if(data.send_socials[provider])
+							switch(data.send_socials[provider].error) {
+								case 'NOT_CONNECTED':
+									Notification.error("Вы не подключили \""+socialsService.alias[provider].ru+"\"");
+								break;
+								case 'PROVIDER_NOT_FOUND':
+									Notification.error("Социальная сеть \""+socialsService.alias[provider].ru+"\" не доступна.");
+								break;
+								default:
+									Notification.error("Ошибка отправки в \""+socialsService.alias[provider].ru+"\"");
+								break;
+							}
+					}
+			if(!err) Notification.success('Сообщение отправлено');
+			defer.resolve(data);
+		}, function(err) {
+			Notification.error("Ошибка отправки сообщения");
+			defer.reject(err);
+		});
+		return defer.promise;
+	}
+	function removePost(index) {
+		var defer = $q.defer();
+		User.posts.destroyById({
+			id: $rootScope.currentUser.id,
+			fk: priv.posts[index].id
+		}, function(res){
+			angular.element('#post-'+priv.posts[index].id).addClass('in-remove');
+			$timeout(function() {
+				priv.posts.splice(index, 1);
+				defer.resolve();
+			}, 500);
+		}, defer.reject);
+		return defer.promise;
+	}
+	function pullPosts() {
+		var defer = $q.defer();
+		User.posts({
+			id: $rootScope.currentUser.id,
+			filter: {limit: priv.limit, order: 'date DESC', skip: priv.skip}
+		}, function(data) {
+			priv.posts.push.apply(priv.posts, data);
+			priv.skip += data.length;
+			defer.resolve(priv.posts);
+		}, defer.reject);
+		return defer.promise;
+	}
+	function getPosts() {
+		return priv.posts.length ? priv.posts : null;
+	}
+
+	return {
+		add: newPost,
+		remove: removePost,
+		getPosts: getPosts,
+		pull: pullPosts,
+		setConf: setConf
+	}
+}])
+.controller('AsideCtrl', ['$scope', function($scope) {
+	$scope.pageUp = function() {
+		angular.element('body').animate({
+			scrollTop: 0
+		}, 500);
+		angular.element('body').removeClass('menu-showed');
+	};
+	$scope.toggleMenu = function() {
+		angular.element('body').toggleClass('menu-showed');
+	};
+}]);

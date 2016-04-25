@@ -47,8 +47,14 @@ app
 						email: data.user.email,
 						userName: data.user.username,
 						showName: data.user.username || data.user.email,
-						socials: socialsService.socials(data.socials)
+						socials: socialsService.socials()
 					};
+					$rootScope.currentUser.socials.connected = data.socials;
+					try {
+						$rootScope.currentUser.avatar = $rootScope.currentUser.socials[data.avatar].avatar;
+					} catch (err) {
+						$rootScope.currentUser.avatar = data.avatar;
+					}
 					$state.go('home');
 				}, function(err) {
 					loginForm.sendBtn.disabled = false;

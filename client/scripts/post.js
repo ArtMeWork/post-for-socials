@@ -1,55 +1,61 @@
 app
-.controller('MyPostCtrl', ['$scope', '$rootScope', 'Author', 'socialsService', 'Notification', function ($scope, $rootScope, User, socialsService, Notification) {
+.controller('MyPostCtrl', ['$scope', '$rootScope', '$timeout', '$filter', 'Author', 'Posts', function($scope, $rootScope, $timeout, $filter, User, Posts) {
+	var count = 0,
+	postsConf = {
+		limit: 10
+	};
+	$scope.posts = [];
+	$scope.posts_not_end = true;
 	
-	$scope.posts = null;
+	Posts.setConf(postsConf);
+	Posts.pull().finally(function() {
+		$scope.$watch(function() {return Posts.getPosts()}, function(posts) {
+			$scope.posts = posts;
+			if (count*postsConf.limit+postsConf.limit>posts.length) $scope.posts_not_end=false; else {
+				count++;
+				$scope.posts_not_end=true;
+			}
+		}, true);
+	});
 
-	var getPosts = function() {
-		User.posts({
-			id: $rootScope.currentUser.id
-		}, function(data) {
-			$scope.posts = data;
-		});
+	$scope.loadMore = function() {
+		if($scope.posts_not_end===true) {
+			$scope.posts_not_end = "load";
+			Posts.pull();
+		}
 	};
 
-	getPosts();
-
+	$scope.remove = Posts.remove;
+}])
+.controller('AddPostCtrl', ['$scope', 'Author', 'Posts', 'Notification', function($scope, User, Posts, Notification) {
+	function twitterValid() {
+		if ($scope.newPost.text.length>=140 && $scope.newPost.socials.indexOf('twitter')!=-1) {
+			$scope.newPost.socials.splice($scope.newPost.socials.indexOf('twitter'), 1);
+			Notification('Лимит сообщения для твиттера 140 символов.');
+		}
+	}
+	$("#addPost_text").on("keydown", function(e) {
+		if ((e.keyCode == 10 || e.keyCode == 13) && e.ctrlKey) {
+			if(e.target.value.trim())
+				$scope.newPost.send();
+		}
+		twitterValid();
+	});
 	$scope.newPost = {
-		text: null,
+		text: "",
 		socials: [],
 		check: function(item) {
 			$scope.newPost.socials.indexOf(item) === -1 ?
 			$scope.newPost.socials.push(item) :
 			$scope.newPost.socials.splice($scope.newPost.socials.indexOf(item), 1);
+			twitterValid();
 		},
 		send: function() {
-			User.posts.create({id:$rootScope.currentUser.id}, {
-				text: $scope.newPost.text,
-				socials: $scope.newPost.socials
-			}, function(data) {
-				$scope.newPost.text = null;
+			Posts.add($scope.newPost.text, $scope.newPost.socials).then(function() {
+				$scope.newPost.text = "";
 				$scope.newPost.socials = [];
-				$scope.posts.push(data);
-				if(data.send_socials)
-					for(var provider in data.send_socials)
-						if(!data.send_socials[provider] || data.send_socials[provider].error) {
-							Notification.error("Ошибка отправки в \""+socialsService.alias[provider].ru+"\"");
-						}
+				angular.element('#addPost').modal('hide');
 			});
 		}
 	};
-
-	$scope.remove = function(id) {
-		$scope.posts.some(function(post, index) {
-			if (post.id == id) {
-				User.posts.destroyById({
-					id: $rootScope.currentUser.id,
-					fk: id
-				}, function(res){
-					$scope.posts.splice(index, 1);
-					return true;
-				});
-			}
-		});
-	};
-
 }]);
