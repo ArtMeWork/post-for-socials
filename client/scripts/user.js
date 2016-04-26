@@ -9,7 +9,7 @@ app
 
   $scope.alias = socialsService.alias;
 
-	$scope.settings = {
+	var defaultSettings = {
 		username: "",
 		password: "",
 		confirmPassword: "",
@@ -18,12 +18,19 @@ app
 		avatar_socials: "",
 		avatar_url: ""
 	};
-	var defaultSettings = angular.copy($scope.settings);
+
+	$scope.settings = angular.copy(defaultSettings);
 
 	$scope.updateAvatar = function(model) {
 		model === "url" ? $scope.settings.avatar_socials = $scope.settings.deleteAvatar = "" :
 			model === "delete" ? $scope.settings.avatar_socials = $scope.settings.avatar_url = "" :
 				$scope.settings.avatar_url = $scope.settings.deleteAvatar = "";
+	};
+
+	$scope.updateName = function(name) {
+		typeof name === "boolean" ?
+			$scope.settings.username = "" :
+			$scope.settings.deleteUsername = false;
 	};
 
 	$scope.send = function() {
@@ -54,6 +61,7 @@ app
 				}
 				$rootScope.currentUser.showName = data.username || data.email;
 				$scope.settings = angular.copy(defaultSettings);
+
 				Notification.success('Ваши найстройки успешно изменены!');
 			}, function(err) {
 				if(err.usernameExist)

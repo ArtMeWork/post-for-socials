@@ -1,31 +1,31 @@
 app
 .controller('MyPostCtrl', ['$scope', '$rootScope', '$timeout', '$filter', 'Author', 'Posts', function($scope, $rootScope, $timeout, $filter, User, Posts) {
-	var count = 0,
-	postsConf = {
-		limit: 10
+	var postsConf = {
+		posts: [],
+		limit: 10,
+		skip: 0
 	};
+	
 	$scope.posts = [];
 	$scope.posts_not_end = true;
+	$scope.remove = Posts.remove;
 	
 	Posts.setConf(postsConf);
 	Posts.pull().finally(function() {
 		$scope.$watch(function() {return Posts.getPosts()}, function(posts) {
 			$scope.posts = posts;
-			if (count*postsConf.limit+postsConf.limit>posts.length) $scope.posts_not_end=false; else {
-				count++;
-				$scope.posts_not_end=true;
-			}
 		}, true);
 	});
 
 	$scope.loadMore = function() {
 		if($scope.posts_not_end===true) {
 			$scope.posts_not_end = "load";
-			Posts.pull();
+			Posts.pull().then(function(res) {
+				if (res==="END") $scope.posts_not_end = false; else $scope.posts_not_end = true;
+			});
 		}
 	};
 
-	$scope.remove = Posts.remove;
 }])
 .controller('AddPostCtrl', ['$scope', 'Author', 'Posts', 'Notification', function($scope, User, Posts, Notification) {
 	function twitterValid() {
@@ -54,6 +54,7 @@ app
 			Posts.add($scope.newPost.text, $scope.newPost.socials).then(function() {
 				$scope.newPost.text = "";
 				$scope.newPost.socials = [];
+				$scope.addPost.$setPristine();
 				angular.element('#addPost').modal('hide');
 			});
 		}

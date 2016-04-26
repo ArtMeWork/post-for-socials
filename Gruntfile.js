@@ -5,14 +5,14 @@ module.exports = grunt => {
 		pkg: grunt.file.readJSON('package.json'),
 
 		loopback_sdk_angular: {
-	    main: {
+	    local: {
 	      options: {
 	      	apiUrl: '/api',
 	        input: 'server/server.js',
 	        output: 'client/scripts/services/lb-services.js'
 	      }
 	    },
-	    ghPages: {
+	    remote: {
 	    	options: {
 	      	apiUrl: 'https://socpost.herokuapp.com/api',
 	    		input: 'server/server.js',
@@ -119,17 +119,17 @@ module.exports = grunt => {
 			},
 			production: {
 				files: {
-					'client/index.html': ['client/views/index.html']
+					'client/index.html': ['client/index_dev.html']
 				}
 			},
 			development: {
 				files: {
-					'client/index.html': ['client/views/index.html']
+					'client/index.html': ['client/index_dev.html']
 				}
 			},
 			ghPages: {
 				files: {
-					'client/ghpages/index.html': ['client/views/index.html']
+					'client/ghpages/index.html': ['client/index_dev.html']
 				}
 			}
 		},
@@ -173,8 +173,9 @@ module.exports = grunt => {
 	grunt.loadNpmTasks('grunt-contrib-uglify');
 	grunt.loadNpmTasks('grunt-processhtml');
 
-	grunt.registerTask('build', ['clean:build', 'less:production', 'cssmin:production', 'copy:production', 'loopback_sdk_angular:main', 'uglify:production', 'processhtml:production']);
-	grunt.registerTask('dev', ['less:development', 'processhtml:development','loopback_sdk_angular:main']);
-	grunt.registerTask('ghPages', ['clean:build', 'less:production', 'cssmin:production', 'copy:production', 'loopback_sdk_angular:ghPages', 'uglify:production', 'processhtml:production', 'copy:ghPages', 'processhtml:ghPages']);
+	grunt.registerTask('build', ['clean:build', 'less:production', 'cssmin:production', 'copy:production', 'loopback_sdk_angular:local', 'uglify:production', 'processhtml:production']);
+	grunt.registerTask('dev-without-node', ['less:development', 'processhtml:development', 'loopback_sdk_angular:remote']);
+	grunt.registerTask('dev', ['dev-without-node', 'loopback_sdk_angular:local']);
+	grunt.registerTask('ghPages', ['clean:build', 'less:production', 'cssmin:production', 'copy:production', 'loopback_sdk_angular:remote', 'uglify:production', 'processhtml:production', 'copy:ghPages', 'processhtml:ghPages']);
 	grunt.registerTask('default', ['connect', 'watch']);
 };

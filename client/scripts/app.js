@@ -286,12 +286,13 @@ app
 	}
 	function newPost(text, socials) {
 		var defer = $q.defer();
-		User.posts.create({id:$rootScope.currentUser.id}, {
+		User.prototype$__create__posts({id:$rootScope.currentUser.id}, {
 			text: text,
 			socials: socials
 		}, function(data) {
 			var err = false;
 			priv.posts.splice(0,0,data);
+			priv.skip += 1;
 			if(data.send_socials)
 				for(var provider in data.send_socials)
 					if(!data.send_socials[provider] || data.send_socials[provider].error) {
@@ -319,7 +320,7 @@ app
 	}
 	function removePost(index) {
 		var defer = $q.defer();
-		User.posts.destroyById({
+		User.prototype$__destroyById__posts({
 			id: $rootScope.currentUser.id,
 			fk: priv.posts[index].id
 		}, function(res){
@@ -333,13 +334,15 @@ app
 	}
 	function pullPosts() {
 		var defer = $q.defer();
-		User.posts({
+		User.prototype$__get__posts({
 			id: $rootScope.currentUser.id,
 			filter: {limit: priv.limit, order: 'date DESC', skip: priv.skip}
 		}, function(data) {
 			priv.posts.push.apply(priv.posts, data);
 			priv.skip += data.length;
-			defer.resolve(priv.posts);
+			data.length < priv.limit ?
+				defer.resolve("END") :
+				defer.resolve(priv.posts);
 		}, defer.reject);
 		return defer.promise;
 	}

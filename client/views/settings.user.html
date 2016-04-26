@@ -11,10 +11,10 @@
 	<form name="settingsForm" ng-submit="settingsForm.$valid && send()">
 		<div class="form-group">
 			<label>Имя пользователя</label>
-			<input type="text" ng-model="settings.username" name="username" class="form-control" placeholder="username123" username ng-model-options="{debounce: 500}">
+			<input type="text" ng-model="settings.username" name="username" class="form-control" placeholder="username123" username ng-model-options="{debounce: 500}" ng-change="updateName(settings.username)">
 		</div>
 		<div class="form-group">
-			<input class="checkbox" type="checkbox" ng-model="settings.deleteUsername" id="settings_remove_nickname"><label for="settings_remove_nickname">Удалить имя пользователя</label>
+			<input class="checkbox" type="checkbox" ng-model="settings.deleteUsername" id="settings_remove_nickname" ng-change="updateName(settings.deleteUsername)"><label for="settings_remove_nickname">Удалить имя пользователя</label>
 		</div>
 		<br>
 		<div class="form-group">
