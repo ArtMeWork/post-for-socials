@@ -5,7 +5,7 @@ app
 		limit: 10,
 		skip: 0
 	};
-	
+
 	$scope.posts = [];
 	$scope.posts_not_end = true;
 	$scope.remove = Posts.remove;

@@ -3,38 +3,43 @@
 var app = angular.module('postApp', ['ui.router', 'ngResource', 'lbServices', 'ui-notification']);
 app
 .config(['$stateProvider', '$urlRouterProvider', 'NotificationProvider', function($stateProvider, $urlRouterProvider, NotificationProvider) {
-	$urlRouterProvider.
-		otherwise("/hello");
+	$urlRouterProvider.otherwise("/");
 	$stateProvider
-		.state('hello', {
-			url: '/hello',
-			template: "Hello world!"
+		.state('app', {
+			templateUrl: "views/main.html"
 		})
-		.state('home', {
+		.state('app.home', {
 			url: "/",
-			templateUrl: "views/my.post.html",
+			templateUrl: "views/main.posts.html",
 			controller: "MyPostCtrl",
 			auth: true
 		})
-		.state('signup', {
-			url: "/sign-up",
-			templateUrl: "views/reg.auth.html",
-			controller: "RegAuthCtrl"
+		.state('app.settings', {
+			url: "/settings",
+			templateUrl: "views/main.settings.html",
+			controller: "SettingsUserCtrl",
+			auth: true
 		})
-		.state('login', {
-			url: "/login",
-			templateUrl: "views/login.auth.html",
-			controller: "LoginAuthCtrl"
+		.state('landing', {
+			url: "/",
+			templateUrl: "views/landing.html",
+			only_guest: true
+		})
+		.state('landing.login', {
+			url: "login",
+			templateUrl: "views/landing.login.html",
+			controller: "LoginAuthCtrl",
+			only_guest: true
+		})
+		.state('landing.signup', {
+			url: "sign-up",
+			templateUrl: "views/landing.reg.html",
+			controller: "RegAuthCtrl",
+			only_guest: true
 		})
 		.state('logout', {
 			url: "/logout",
 			controller: "LogoutAuthCtrl",
-			auth: true
-		})
-		.state('settings', {
-			url: "/settings",
-			templateUrl: "views/settings.user.html",
-			controller: "SettingsUserCtrl",
 			auth: true
 		});
 
@@ -122,7 +127,7 @@ app
 					localStorage.setItem('$LoopBack$accessTokenId','');
 					localStorage.setItem('$LoopBack$currentUserId','');
 					$rootScope.currentUser = null;
-					$state.go('login');
+					$state.go('landing');
 				}
 			}
 		});
@@ -132,7 +137,11 @@ app
 		angular.element('body').removeClass('menu-showed');
     if (next.auth && !$rootScope.currentUser) {
       event.preventDefault();
-      $state.go('hello');
+      $state.go('landing');
+    } else
+    if (next.only_guest && $rootScope.currentUser) {
+    	event.preventDefault();
+    	$state.go('app.home');
     }
   });
 }])

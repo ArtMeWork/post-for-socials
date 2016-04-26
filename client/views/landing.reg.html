@@ -1,0 +1,20 @@
+<div class="text-center">
+	<h2>Регистрация на сайте</h2>
+	<form name="regForm" ng-submit="regForm.$valid && reg.send()" class="row col-md-4 col-md-offset-4 col-sm-offset-3 col-sm-6">
+		<div class="form-group">
+			<input type="text" id="userName" ng-model="reg.login" class="form-control" placeholder="Имя пользователя" username ng-model-options="{debounce: 500}">
+		</div>
+		<div class="form-group">
+			<input type="email" id="userEmail" ng-model="reg.email" class="form-control" placeholder="Адрес электронной почты" required>
+		</div>
+		<div class="form-group">
+			<input type="password" id="userPassword" ng-model="reg.password" class="form-control" placeholder="Пароль" required>
+		</div>
+		<div class="form-group">
+			<input type="password" ng-model="reg.confirmPassword" confirm-pass="reg.password" class="form-control" placeholder="Повторите пароль">
+		</div>
+		<div class="form-group">
+			<input type="submit" class="btn btn-primary" ng-class="{disabled: regForm.$invalid}" value="Зарегистрироваться">
+		</div>
+	</form>
+</div>

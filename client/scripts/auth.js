@@ -12,7 +12,7 @@ app
 				password: this.password
 			}, function(){
 				Notification.success('Вы успешно зарегистрировались!');
-				$state.go('login');
+				$state.go('landing.login');
 			}, function(err){
 				if(err.data && err.data.error && err.data.error.message) {
 					Notification.error('При регистрации произошла ошибка:'+err.data.error.message);
@@ -55,7 +55,7 @@ app
 					} catch (err) {
 						$rootScope.currentUser.avatar = data.avatar;
 					}
-					$state.go('home');
+					$state.go('app.home');
 				}, function(err) {
 					loginForm.sendBtn.disabled = false;
 					enter = false;
@@ -70,7 +70,7 @@ app
 	.$promise
 	.then(function() {
 		$rootScope.currentUser = null;
-		$state.go('hello');
+		$state.go('landing');
 	});
 }])
 

@@ -16,57 +16,8 @@
 	<!-- /build -->
 </head>
 <body ng-app="postApp">
-	<div id="layout">
-		<aside ng-controller="AsideCtrl">
-			<div class="nav title"><a href="" ng-click="toggleMenu()" id="collapse-menu" class="collapse-btn"></a><a ui-sref="home"><span>S</span><span>o</span><span>c</span>Post</a><a href="" class="new-post-btn" data-toggle="modal" data-target="#addPost"></a></div>
-			<div class="main" id="main">
-				<div class="top-side">
-					<div class="profile-info">
-						<div><img src="" ng-src="{{currentUser.avatar}}" onerror="this.src='/images/no-avatar.png'" class="avatar"></div>
-						<div class="show-name" ng-bind="currentUser.showName"></div>
-					</div>
-					<nav class="main-menu">
-						<a ui-sref-active="active" ui-sref="home"><span class="glyphicon glyphicon-list"></span> Лента</a>
-						<a ui-sref-active="active" ui-sref="settings"><span class="glyphicon glyphicon-cog"></span> Настройки</a>
-						<a ui-sref-active="active" ui-sref="logout"><span class="glyphicon glyphicon-off"></span> Выход</a>
-					</nav>
-				</div>
-				<div class="center-side">
-					<div class="center-side-inner">
-						<div class="nav">
-							<a class="new-post-btn" href="" data-toggle="modal" data-target="#addPost"><span class="glyphicon glyphicon-pencil"></span>Написать</a>
-						</div>
-					</div>
-				</div>
-				<div class="down-side">
-					<div class="nav">
-						<a href="" ng-click="pageUp()"><span class="glyphicon glyphicon-chevron-up"></span> Вверх</a>
-					</div>
-				</div>
-			</div>
-		</aside>
-		<section id="wrapper" ui-view></section>
-	</div>
-
-	<div class="modal fade add-post" id="addPost" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" ng-controller="AddPostCtrl">
-		<div class="modal-dialog" role="document">
-			<div class="modal-content">
-				<form name="addPost" ng-submit="addPost.$valid && newPost.send()">
-					<div class="modal-header">
-						<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span class="glyphicon glyphicon-remove" aria-hidden="true"></span></button>
-						<h4 class="modal-title" id="myModalLabel">Написать</h4>
-					</div>
-					<div class="modal-body">
-						<div class="form-group"><textarea ng-model="newPost.text" id="addPost_text" rows="3" class="form-control" placeholder="Ваш текст..." required></textarea></div>
-						<div class="form-group clearfix">
-							<span class="btn btn-default btn-social" ng-repeat="social in currentUser.socials.connected" ng-click="newPost.check(social.provider)" ng-class="{active: newPost.socials.indexOf(social.provider) !== -1}"><span class="icon-{{::social.provider}}"></span></span>
-							<button type="submit" class="btn btn-default btn-submit" ng-disabled="addPost.$invalid">Отправить</button>
-						</div>
-					</div>
-				</form>
-			</div>
-		</div>
-	</div>
+	
+	<ui-view></ui-view>
 
 	<!-- build:js:production build/js/app.min.js -->
 	<!-- /build -->
