@@ -1,0 +1,14 @@
+<div class="text-center">
+	<h2>Войти на сайт</h2>
+	<form class="row col-md-4 col-md-offset-4 col-sm-offset-3 col-sm-6" name="loginForm" ng-submit="login.send()">
+		<div class="form-group">
+			<input type="text" class="form-control" ng-model="login.login" placeholder="Логин или email адрес" required>
+		</div>
+		<div class="form-group">
+			<input type="password" class="form-control" ng-model="login.password" placeholder="Пароль" required>
+		</div>
+		<div class="form-group">
+			<button class="btn" name="sendBtn" type="submit">Войти</button>
+		</div>
+	</form>
+</div>
