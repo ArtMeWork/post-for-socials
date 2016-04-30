@@ -362,6 +362,12 @@ form:not([novalidate]) .ng-dirty.ng-invalid:focus {
 .layout section.wrapper article:hover .delete {
   opacity: 1;
 }
+.layout section.wrapper article .text {
+  white-space: pre-wrap;
+  max-height: 200px;
+  overflow: hidden;
+  overflow-y: auto;
+}
 .layout section.wrapper article .info {
   margin-top: 10px;
   padding-top: 10px;
