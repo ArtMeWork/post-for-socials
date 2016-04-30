@@ -247,18 +247,12 @@ form:not([novalidate]) .ng-dirty.ng-invalid:focus {
 }
 .layout aside .title {
   font-size: 20px;
-  letter-spacing: 2px;
   font-weight: bold;
+  text-transform: uppercase;
   border-bottom: 1px solid #111;
 }
-.layout aside .title span:nth-child(1) {
+.layout aside .title span {
   color: #55ACEE;
-}
-.layout aside .title span:nth-child(2) {
-  color: #5C82AB;
-}
-.layout aside .title span:nth-child(3) {
-  color: #4862A3;
 }
 .layout aside .center-side {
   position: absolute;
@@ -639,34 +633,21 @@ form:not([novalidate]) .ng-dirty.ng-invalid:focus {
 }
 #landing .header .layout .menu .title {
   font-size: 30px;
-  letter-spacing: 2px;
   color: #fff;
   text-shadow: 2px 2px 2px rgba(0, 0, 0, 0.4);
   text-decoration: none;
   line-height: 1;
   height: 36px;
   float: left;
+  font-weight: bold;
+  text-transform: uppercase;
+}
+#landing .header .layout .menu .title:hover span {
+  color: #5C82AB;
 }
 #landing .header .layout .menu .title span {
   transition: color .5s;
-}
-#landing .header .layout .menu .title:hover span:nth-child(1) {
-  color: #5C82AB;
-}
-#landing .header .layout .menu .title:hover span:nth-child(2) {
-  color: #4862A3;
-}
-#landing .header .layout .menu .title:hover span:nth-child(3) {
   color: #55ACEE;
-}
-#landing .header .layout .menu .title span:nth-child(1) {
-  color: #55ACEE;
-}
-#landing .header .layout .menu .title span:nth-child(2) {
-  color: #5C82AB;
-}
-#landing .header .layout .menu .title span:nth-child(3) {
-  color: #4862A3;
 }
 #landing .header .layout .landing-view > *:first-child {
   margin-top: 30px;

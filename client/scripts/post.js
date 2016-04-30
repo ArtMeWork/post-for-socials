@@ -14,6 +14,7 @@ app
 	Posts.pull().finally(function() {
 		$scope.$watch(function() {return Posts.getPosts()}, function(posts) {
 			$scope.posts = posts;
+			if (Array.isArray(posts) && posts.length < postsConf.limit) $scope.posts_not_end = false;
 		}, true);
 	});
 
