@@ -473,6 +473,9 @@ form:not([novalidate]) .ng-dirty.ng-invalid:focus {
   margin-top: 3px;
 }
 @media (min-width: 500px) {
+  .modal-dialog {
+    width: 500px;
+  }
   .layout aside {
     display: block;
     width: 200px;
@@ -664,17 +667,6 @@ form:not([novalidate]) .ng-dirty.ng-invalid:focus {
 }
 #landing .header .layout .menu .title span:nth-child(3) {
   color: #4862A3;
-}
-#landing .header .layout .landing-view.ng-enter,
-#landing .header .layout .landing-view.ng-leave {
-  -webkit-transition: 0.5s linear all;
-  -moz-transition: 0.5s linear all;
-  -o-transition: 0.5s linear all;
-  transition: 0.5s linear all;
-  border: 1px solid blue;
-}
-#landing .header .layout .landing-view.ng-enter.ng-enter-active {
-  border: 1px solid red;
 }
 #landing .header .layout .landing-view > *:first-child {
   margin-top: 30px;

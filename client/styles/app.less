@@ -199,17 +199,11 @@ form:not([novalidate]) .ng-dirty {
 		}
 		.title {
 			font-size: 20px;
-			letter-spacing: 2px;
 			font-weight: bold;
+			text-transform: uppercase;
 			border-bottom: 1px solid #111;
-			span:nth-child(1) {
+			span {
 				color: @twitter-color;
-			}
-			span:nth-child(2) {
-				color: @vk-color;
-			}
-			span:nth-child(3) {
-				color: @facebook-color;
 			}
 		}
 		.center-side {
@@ -396,7 +390,10 @@ form:not([novalidate]) .ng-dirty {
 	}
 }
 
-@media (min-width: 500px) {
+@media (min-width: @screen-sm) {
+	.modal-dialog {
+		width: @screen-sm;
+	}
 	.layout aside {
 		display: block;
 		width: 200px;
@@ -430,7 +427,7 @@ form:not([novalidate]) .ng-dirty {
 	}
 }
 
-@media (max-width: 499px) {
+@media (max-width: @screen-xs) {
 	body.menu-showed {
 		overflow: hidden;
 		.layout aside {

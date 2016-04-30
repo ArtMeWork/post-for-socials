@@ -27,8 +27,8 @@ app
 .controller('LoginAuthCtrl', ['$rootScope', '$scope', 'Author', '$state', 'socialsService', 'Notification', function($rootScope, $scope, User, $state, socialsService, Notification) {
 	var enter = false;
 	$scope.login = {
-		login: "meridos@mail.ru",
-		password: "admintema",
+		login: "user",
+		password: "user",
 		send: function () {
 			var _name=null,
 					_email=null;
@@ -50,11 +50,9 @@ app
 						socials: socialsService.socials()
 					};
 					$rootScope.currentUser.socials.connected = data.socials;
-					try {
-						$rootScope.currentUser.avatar = $rootScope.currentUser.socials[data.avatar].avatar;
-					} catch (err) {
-						$rootScope.currentUser.avatar = data.avatar;
-					}
+					if(data.socials[data.user.avatar])
+						$rootScope.currentUser.avatar = data.socials[data.user.avatar].avatar; else
+						$rootScope.currentUser.avatar = data.user.avatar;
 					$state.go('app.home');
 				}, function(err) {
 					loginForm.sendBtn.disabled = false;
@@ -70,6 +68,9 @@ app
 	.$promise
 	.then(function() {
 		$rootScope.currentUser = null;
+		localStorage.removeItem('$LoopBack$accessTokenId');
+		localStorage.removeItem('$LoopBack$currentUserId');
+		localStorage.removeItem('$LoopBack$rememberMe');
 		$state.go('landing');
 	});
 }])

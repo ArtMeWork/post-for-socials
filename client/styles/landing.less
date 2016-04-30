@@ -41,35 +41,20 @@
 				}
 				.title {
 					font-size: 30px;
-					letter-spacing: 2px;
 					color: #fff;
 					text-shadow: 2px 2px 2px rgba(0,0,0,0.4);
 					text-decoration: none;
 					line-height: 1;
 					height: 36px;
 					float: left;
-					span {
-						transition: color .5s;
-					}
-					&:hover {
-						span:nth-child(1) {
-							color: @vk-color;
-						}
-						span:nth-child(2) {
-							color: @facebook-color;
-						}
-						span:nth-child(3) {
-							color: @twitter-color;
-						}
-					}
-					span:nth-child(1) {
-						color: @twitter-color;
-					}
-					span:nth-child(2) {
+					font-weight: bold;
+					text-transform: uppercase;
+					&:hover span {
 						color: @vk-color;
 					}
-					span:nth-child(3) {
-						color: @facebook-color;
+					span {
+						transition: color .5s;
+						color: @twitter-color;
 					}
 				}
 			}
