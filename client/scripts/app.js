@@ -145,6 +145,9 @@ app
     	$state.go('app.home');
     }
   });
+  $rootScope.$on('$stateChangeSuccess', function() {
+  	document.body.scrollTop = document.documentElement.scrollTop = 0;
+  });
 }])
 .factory('socialsService', ['$q', '$rootScope', 'Author', 'Notification', function($q, $rootScope, User, Notification) {
 	var priv, pub;
