@@ -1,6 +1,6 @@
 <div class="layout">
 	<aside ng-controller="AsideCtrl">
-		<div class="nav title"><a href="" ng-click="toggleMenu()" id="collapse-menu" class="collapse-btn"></a><a ui-sref=".home"><span>S</span><span>o</span><span>c</span>Post</a><a href="" class="new-post-btn" data-toggle="modal" data-target="#addPost"></a></div>
+		<div class="nav title"><a href="" ng-click="toggleMenu()" id="collapse-menu" class="collapse-btn"></a><a ui-sref=".home"><span>Soc</span>Post</a><a href="" class="new-post-btn" data-toggle="modal" data-target="#addPost"></a></div>
 		<div class="main" id="main">
 			<div class="top-side">
 				<div class="profile-info">
@@ -27,7 +27,7 @@
 			</div>
 		</div>
 	</aside>
-	<section class="wrapper" ui-view autoscroll="true"></section>
+	<section class="wrapper" ui-view></section>
 </div>
 
 <div class="modal fade add-post" id="addPost" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" ng-controller="AddPostCtrl">
