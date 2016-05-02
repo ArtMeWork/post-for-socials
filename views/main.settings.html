@@ -43,3 +43,20 @@
 		</div>
 	</form>
 </article>
+
+<article>
+	<div class="text-center">
+		<button ng-click="removeUser.show=true" class="btn btn-danger" ng-hide="removeUser.show">Удалить аккаунт</button>
+	</div>
+	<div ng-show="removeUser.show">
+		<label>Для удаления аккаунта и сообщений, введите пароль:</label>
+		<form class="clearfix" name="removeUserForm" ng-submit="removeUserForm.$valid && removeUser.remove()">
+			<div class="input-group">
+				<input type="password" class="form-control" name="password" required>
+				<div class="input-group-btn">
+					<input type="submit" class="btn btn-default btn-noradius" value="Удалить">
+				</div>
+			</div>
+		</form>
+	</div>
+</article>
