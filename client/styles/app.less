@@ -22,8 +22,10 @@ body {
 	top: 0px;
 }
 .btn {
-	border-radius: 500px;
-	padding: 6px 9px;
+	&:not(.btn-noradius) {
+		border-radius: 500px;
+		padding: 6px 9px;
+	}
 }
 *:hover, *:active, *:focus {
 	outline: none !important;
@@ -288,11 +290,15 @@ form:not([novalidate]) .ng-dirty {
 			border-radius: 3px;
 			transition: opacity .5s;
 			word-wrap: break-word;
+			line-height: 160%;
 			&.in-remove {
 				opacity: 0;
 			}
 			&>*:first-child {
 				margin-top: 0 !important;
+			}
+			&>*:last-child {
+				margin-bottom: 0 !important;
 			}
 			h1,h2,h3,h4,h5,h6 {
 				&.line {

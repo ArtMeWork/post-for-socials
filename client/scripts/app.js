@@ -37,6 +37,11 @@ app
 			controller: "RegAuthCtrl",
 			only_guest: true
 		})
+		.state('landing.privacy', {
+			url: "privacy",
+			templateUrl: "views/privacy.html",
+			only_guest: true
+		})
 		.state('logout', {
 			url: "/logout",
 			controller: "LogoutAuthCtrl",

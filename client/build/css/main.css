@@ -52,7 +52,7 @@ body {
 .glyphicon {
   top: 0px;
 }
-.btn {
+.btn:not(.btn-noradius) {
   border-radius: 500px;
   padding: 6px 9px;
 }
@@ -344,12 +344,16 @@ form:not([novalidate]) .ng-dirty.ng-invalid:focus {
   border-radius: 3px;
   transition: opacity .5s;
   word-wrap: break-word;
+  line-height: 160%;
 }
 .layout section.wrapper article.in-remove {
   opacity: 0;
 }
 .layout section.wrapper article > *:first-child {
   margin-top: 0 !important;
+}
+.layout section.wrapper article > *:last-child {
+  margin-bottom: 0 !important;
 }
 .layout section.wrapper article h1.line,
 .layout section.wrapper article h2.line,
@@ -581,7 +585,7 @@ form:not([novalidate]) .ng-dirty.ng-invalid:focus {
 #page_settings .btn-social {
   margin-bottom: 10px;
 }
-#landing .header {
+#landing > .header {
   background: url("../images/bg-landing.jpg") no-repeat 50% 0;
   background-size: cover;
   color: #fff;
@@ -590,54 +594,55 @@ form:not([novalidate]) .ng-dirty.ng-invalid:focus {
   margin-bottom: 20px;
   transition: all 1s;
 }
-#landing .header * {
+#landing > .header * {
   color: #fff;
 }
-#landing .header .layout {
+#landing > .header .layout {
   padding: 20px 10px;
 }
-#landing .header .layout h1,
-#landing .header .layout h2,
-#landing .header .layout h3,
-#landing .header .layout h4,
-#landing .header .layout h5,
-#landing .header .layout h6 {
+#landing > .header .layout h1,
+#landing > .header .layout h2,
+#landing > .header .layout h3,
+#landing > .header .layout h4,
+#landing > .header .layout h5,
+#landing > .header .layout h6,
+#landing > .header .layout p {
   text-shadow: 2px 2px 2px rgba(0, 0, 0, 0.3);
 }
-#landing .header .layout .btn,
-#landing .header .layout input {
+#landing > .header .layout .btn,
+#landing > .header .layout input {
   transition: background .5s, color .5s;
   background: none;
   border: 2px solid #fff;
 }
-#landing .header .layout .btn.btn:hover,
-#landing .header .layout input.btn:hover,
-#landing .header .layout .btn.btn.active,
-#landing .header .layout input.btn.active {
+#landing > .header .layout .btn.btn:hover,
+#landing > .header .layout input.btn:hover,
+#landing > .header .layout .btn.btn.active,
+#landing > .header .layout input.btn.active {
   background: #fff;
   color: #73AFBA;
   box-shadow: none;
 }
-#landing .header .layout input[type="text"],
-#landing .header .layout input[type="password"],
-#landing .header .layout input[type="email"] {
+#landing > .header .layout input[type="text"],
+#landing > .header .layout input[type="password"],
+#landing > .header .layout input[type="email"] {
   text-shadow: 0 0px 5px rgba(0, 0, 0, 0.5);
 }
-#landing .header .layout input[type="text"].ng-dirty.ng-invalid:not(.ng-empty),
-#landing .header .layout input[type="password"].ng-dirty.ng-invalid:not(.ng-empty),
-#landing .header .layout input[type="email"].ng-dirty.ng-invalid:not(.ng-empty) {
+#landing > .header .layout input[type="text"].ng-dirty.ng-invalid:not(.ng-empty),
+#landing > .header .layout input[type="password"].ng-dirty.ng-invalid:not(.ng-empty),
+#landing > .header .layout input[type="email"].ng-dirty.ng-invalid:not(.ng-empty) {
   border: 2px solid #F11919;
 }
-#landing .header .layout input[type="text"]::-webkit-input-placeholder,
-#landing .header .layout input[type="password"]::-webkit-input-placeholder,
-#landing .header .layout input[type="email"]::-webkit-input-placeholder {
+#landing > .header .layout input[type="text"]::-webkit-input-placeholder,
+#landing > .header .layout input[type="password"]::-webkit-input-placeholder,
+#landing > .header .layout input[type="email"]::-webkit-input-placeholder {
   color: #fff !important;
 }
-#landing .header .layout .menu .btn {
+#landing > .header .layout .menu .btn {
   margin: 0 10px;
   float: right;
 }
-#landing .header .layout .menu .title {
+#landing > .header .layout .menu .title {
   font-size: 30px;
   color: #fff;
   text-shadow: 2px 2px 2px rgba(0, 0, 0, 0.4);
@@ -648,30 +653,81 @@ form:not([novalidate]) .ng-dirty.ng-invalid:focus {
   font-weight: bold;
   text-transform: uppercase;
 }
-#landing .header .layout .menu .title:hover span {
+#landing > .header .layout .menu .title:hover span {
   color: #5C82AB;
 }
-#landing .header .layout .menu .title span {
+#landing > .header .layout .menu .title span {
   transition: color .5s;
   color: #55ACEE;
 }
-#landing .header .layout .landing-view > *:first-child {
+#landing > .header .layout .landing-view > *:first-child {
   margin-top: 30px;
 }
-#landing .header .layout .landing-view > *:last-child {
+#landing > .header .layout .landing-view > *:last-child {
   margin-bottom: none;
 }
-#landing .layout .wrapper {
+#landing > .header .layout .landing-view .privacy {
+  background: rgba(0, 0, 0, 0.2);
+  padding: 10px;
+}
+#landing > .header .layout .landing-view .privacy p {
+  text-shadow: 0 0 3px rgba(0, 0, 0, 0.5);
+}
+#landing > .layout {
+  padding-bottom: 30px;
+}
+#landing > .layout .wrapper {
   margin: 10px;
 }
+#landing > .layout .wrapper article {
+  text-align: justify;
+}
+#landing > .layout .wrapper article .card-image,
+#landing > .layout .wrapper article .card-image-right {
+  background: url('../images/landing-cards.jpg') no-repeat 0 0;
+  float: left;
+  margin: -10px 10px -20px -10px;
+  position: relative;
+  display: block;
+  top: -10px;
+  width: 150px;
+  height: 150px;
+}
+#landing > .layout .wrapper article .card-image.card-image-2,
+#landing > .layout .wrapper article .card-image-right.card-image-2 {
+  background-position: 0 -160px;
+}
+#landing > .layout .wrapper article .card-image-right {
+  float: right;
+  margin: -10px -10px -20px 10px;
+}
+#landing > .layout footer {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  text-align: center;
+  height: 30px;
+  padding: 5px;
+}
+#landing > .layout footer,
+#landing > .layout footer *,
+#landing > .layout footer *:hover {
+  color: #989898;
+}
 @media (max-width: 450px) {
-  #landing .header .layout .menu {
+  #landing > .header .layout .menu {
     text-align: center;
   }
-  #landing .header .layout .menu .btn,
-  #landing .header .layout .menu .title {
+  #landing > .header .layout .menu .btn,
+  #landing > .header .layout .menu .title {
     float: none;
     width: 100%;
     margin: 0 0 15px 0;
+  }
+  #landing > .layout .wrapper article .card-image,
+  #landing > .layout .wrapper article .card-image-right {
+    float: none;
+    margin: 0 auto;
   }
 }

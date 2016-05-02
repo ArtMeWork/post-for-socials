@@ -1,5 +1,5 @@
 #landing {
-	.header {
+	&>.header {
 		background: url("@{images-path}bg-landing.jpg") no-repeat 50% 0;
 		background-size: cover;
 		color: #fff;
@@ -12,7 +12,7 @@
 		}
 		.layout {
 			padding: 20px 10px;
-			h1, h2, h3, h4, h5, h6 {
+			h1, h2, h3, h4, h5, h6, p {
 				text-shadow: 2px 2px 2px rgba(0,0,0,0.3);
 			}
 			.btn, input {
@@ -64,21 +64,67 @@
 			.landing-view > *:last-child {
 				margin-bottom: none;
 			}
+			.landing-view .privacy {
+				background: rgba(0,0,0,0.2);
+				padding: 10px;
+				p {
+					text-shadow: 0 0 3px rgba(0,0,0,0.5);
+				}
+			}
 		}
 	}
-	.layout {
+	&>.layout {
+		padding-bottom: 30px;
 		.wrapper {
 			margin: 10px;
+			article {
+				text-align: justify;
+				.card-image, .card-image-right	{
+					background: url('@{images-path}landing-cards.jpg') no-repeat 0 0;
+					float: left;
+					margin: -10px 10px -20px -10px;
+					position: relative;
+					display: block;
+					top: -10px;
+					width: 150px;
+					height: 150px;
+					&.card-image-2 {
+						background-position: 0 -160px;
+					}
+				}
+				.card-image-right {
+					float: right;
+					margin: -10px -10px -20px 10px;
+				}
+			}
+		}
+		footer {
+			position: absolute;
+			bottom: 0;
+			left: 0;
+			right: 0;
+			text-align: center;
+			height: 30px;
+			padding: 5px;
+			&, *, *:hover {
+				color: #989898;
+			}
 		}
 	}
 
 	@media (max-width: 450px) {
-		.header .layout .menu {
+		&>.header .layout .menu {
 			text-align: center;
 			.btn, .title {
 				float: none;
 				width: 100%;
 				margin: 0 0 15px 0;
+			}
+		}
+		&>.layout .wrapper article {
+			.card-image, .card-image-right {
+				float: none;
+				margin: 0 auto;
 			}
 		}
 	}

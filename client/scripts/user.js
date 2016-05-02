@@ -1,5 +1,5 @@
 app
-.controller('SettingsUserCtrl', ['$scope', 'Author', '$rootScope', 'socialsService', 'Notification', function($scope, User, $rootScope, socialsService, Notification) {
+.controller('SettingsUserCtrl', ['$scope', 'Author', '$rootScope', '$state', 'socialsService', 'Notification', function($scope, User, $rootScope, $state, socialsService, Notification) {
 
   $scope.connect = function(provider) {
   	socialsService.connect(provider);
@@ -72,5 +72,30 @@ app
 				}
 			});
 		}
-	}
+	};
+
+	$scope.removeUser = {
+		show: false,
+		remove: function() {
+			User.login({
+				email: $rootScope.currentUser.email,
+				password: removeUserForm.password.value
+			}).$promise.then(function() {
+				User.prototype$__delete__posts({
+					id: $rootScope.currentUser.id
+				}).$promise.then(function() {
+					User.deleteById({id: $rootScope.currentUser.id}).$promise.then(function() {
+						Notification.success('Аккаунт удален');
+						$state.go('logout');
+					}, function() {
+						Notification.error('Ошибка удаления аккаунта');
+					});
+				}, function() {
+					Notification.error('Ошибка удаления сообщений');
+				});
+			}, function() {
+				Notification.error('Вы ввели не правильный пароль');
+			});
+		}
+	};
 }]);
