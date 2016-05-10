@@ -55,7 +55,7 @@ module.exports = function(Author) {
       facebook.setAccessToken(this.access_token);
       facebook.api('me/feed', 'post', {message: text}, function (res) {
         !res || res.error ?
-          cb(!res ? 'error occurred' : res.error) :
+          cb(!res ? 'error occurred' : res.error.code == 200 ? 'PERMISSION_ERROR' : res.error) :
           cb(null, true);
       });
     };

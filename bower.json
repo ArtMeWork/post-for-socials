@@ -1,5 +1,5 @@
 {
-  "name": "post-for-all",
+  "name": "SocPost",
   "version": "0.0.0",
   "dependencies": {
     "bootstrap": "^3.3.6",
@@ -9,6 +9,6 @@
     "oauth-js": "oauthio-web#^0.5.2",
     "angular-ui-notification": "^0.2.0"
   },
-  "appPath": "client",
+  "appPath": "client2/libs",
   "moduleName": "postApp"
 }

@@ -12,6 +12,13 @@ module.exports = grunt => {
 	        output: 'client/scripts/services/lb-services.js'
 	      }
 	    },
+	    localhost: {
+	      options: {
+	      	apiUrl: 'http://localhost:5000/api',
+	        input: 'server/server.js',
+	        output: 'client/scripts/services/lb-services.js'
+	      }
+	    },
 	    remote: {
 	    	options: {
 	      	apiUrl: 'https://socpost.herokuapp.com/api',
@@ -175,7 +182,7 @@ module.exports = grunt => {
 
 	grunt.registerTask('build', ['clean:build', 'less:production', 'cssmin:production', 'copy:production', 'loopback_sdk_angular:local', 'uglify:production', 'processhtml:production']);
 	grunt.registerTask('dev-without-node', ['less:development', 'processhtml:development', 'loopback_sdk_angular:remote']);
-	grunt.registerTask('dev', ['dev-without-node', 'loopback_sdk_angular:local']);
+	grunt.registerTask('dev', ['dev-without-node', 'loopback_sdk_angular:localhost']);
 	grunt.registerTask('ghPages', ['clean:build', 'less:production', 'cssmin:production', 'copy:production', 'loopback_sdk_angular:remote', 'uglify:production', 'processhtml:production', 'copy:ghPages', 'processhtml:ghPages']);
 	grunt.registerTask('default', ['connect', 'watch']);
 };

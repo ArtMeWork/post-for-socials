@@ -72,11 +72,6 @@ app
 				return {
 					access_token: result.access_token
 				};
-			},
-			vk: function(result) {
-				return {
-					access_token: result.access_token
-				};
 			}
 		},
 		alias: {

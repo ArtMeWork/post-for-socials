@@ -93,6 +93,9 @@ app
 								case 'PROVIDER_NOT_FOUND':
 									Notification.error("Социальная сеть \""+socialsService.alias[provider].ru+"\" не доступна.");
 								break;
+								case 'PERMISSION_ERROR':
+									Notification.error("Приложение в "+socialsService.alias[provider].site+" еще не прошло проверку для публикации сообщений.");
+								break;
 								default:
 									Notification.error("Ошибка отправки в \""+socialsService.alias[provider].ru+"\"");
 								break;
